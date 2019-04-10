@@ -13,11 +13,11 @@ class RepositoryBase<T extends Typegoose> {
     }
 
     async retrieve() {
-      return await this._dbModel.find({}).exec();
+        return await this._dbModel.find({}).exec();
     }
 
     async update(_id: Types.ObjectId, item: T) {
-        return await this._dbModel.update({ _id: _id }, item).exec();
+        return await this._dbModel.updateOne({ _id: _id }, item).exec();
     }
 
     async delete(_id: string) {
@@ -32,7 +32,6 @@ class RepositoryBase<T extends Typegoose> {
     private toObjectId(_id: string): Types.ObjectId {
         return Types.ObjectId.createFromHexString(_id);
     }
-
 }
 
 export = RepositoryBase;

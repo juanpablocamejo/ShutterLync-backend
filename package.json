@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Aplicación de software libre para facilitar la gestión de servicios de fotografía",
   "scripts": {
+    "build-start": "npm run build-ts && npm run tslint && npm run serve",
     "start": "npm run serve",
     "build": "npm run build-ts && npm run tslint",
     "serve": "node dist/index.js",
@@ -29,6 +30,7 @@
     "express": "^4.16.2",
     "lodash": "^4.17.5",
     "method-override": "^3.0.0",
+    "mime": "^2.4.2",
     "mongoose": "^5.5.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",

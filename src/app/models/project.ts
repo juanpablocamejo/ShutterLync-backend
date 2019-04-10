@@ -1,12 +1,18 @@
 import { Typegoose, prop, Ref, arrayProp } from "typegoose";
-import MediaFile from "./mediaFile";
+import _ from "lodash";
+import { Types } from "mongoose";
+import PreviewFile from "./previewFile";
+import User from "./user";
 class Project extends Typegoose {
-    @prop()
-    name: String;
+    @prop({ required: true })
+    title: String;
+    @prop({ ref: User })
+    owner: Ref<User>;
     @prop()
     createdAt: Date;
-    @arrayProp({ itemsRef: MediaFile })
-    mediaFiles: Ref<MediaFile>[];
+    @arrayProp({ items: PreviewFile })
+    previewFiles: PreviewFile[];
+
 }
 
 export default Project;

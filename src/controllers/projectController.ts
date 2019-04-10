@@ -10,7 +10,6 @@ class ProjectController {
         this._projectService.findById(req.params._id)
             .then(result => res.json(result))
             .catch(err => res.status(404).json("no se encontró el proyecto"));
-
     }
 }
 export default ProjectController;

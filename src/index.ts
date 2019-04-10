@@ -2,6 +2,7 @@ import express from "express";
 import Middlewares from "./config/middelwares";
 import DataAccess from "./config/dataAccess";
 import Environment from "./config/environment";
+import { createTestProject } from "./config/pocScripts";
 
 const app = express();
 
@@ -20,3 +21,5 @@ app.listen(port, () => {
   );
   console.log(" Press CTRL-C to stop\n");
 });
+
+// createTestProject();
