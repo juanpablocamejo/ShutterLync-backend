@@ -1,18 +1,18 @@
 import { Typegoose, prop, Ref, arrayProp } from "typegoose";
 import _ from "lodash";
-import { Types } from "mongoose";
-import PreviewFile from "./previewFile";
-import User from "./user";
-class Project extends Typegoose {
+import { PreviewItem } from "./previewItem";
+import { User } from "./user";
+import { Order } from "./order";
+
+export class Project extends Typegoose {
     @prop({ required: true })
     title: String;
     @prop({ ref: User })
     owner: Ref<User>;
     @prop()
     createdAt: Date;
-    @arrayProp({ items: PreviewFile })
-    previewFiles: PreviewFile[];
-
+    @arrayProp({ items: PreviewItem })
+    previewItems: PreviewItem[];
+    @prop()
+    order: Order;
 }
-
-export default Project;

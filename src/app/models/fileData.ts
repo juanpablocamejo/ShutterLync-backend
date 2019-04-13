@@ -1,9 +1,10 @@
 import { Typegoose, prop, Ref, arrayProp } from "typegoose";
 import { Binary } from "mongodb";
-class FileData extends Typegoose {
+
+export class FileData extends Typegoose {
 
     @prop({ required: true })
     data: Binary;
+    @prop()
+    contentype: String;
 }
-
-export default FileData;

@@ -6,7 +6,7 @@
         "**/dist": true,
         "**/coverge": true
     },
-    "typescript.referencesCodeLens.enabled": true,
+    "typescript.referencesCodeLens.enabled": false,
     "tslint.ignoreDefinitionFiles": false,
     "tslint.autoFixOnSave": true,
     "tslint.exclude": "**/node_modules/**/*",

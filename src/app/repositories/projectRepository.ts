@@ -1,5 +1,5 @@
-import RepositoryBase  from "./repositoryBase";
-import Project from "../models/project";
+import RepositoryBase from "./repositoryBase";
+import { Project } from "../models/project";
 
 class ProjectRepository extends RepositoryBase<Project> {
     constructor() {

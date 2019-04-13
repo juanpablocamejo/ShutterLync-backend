@@ -3,7 +3,7 @@ import { Typegoose, InstanceType } from "typegoose";
 import { Model, Types } from "mongoose";
 
 class RepositoryBase<T extends Typegoose> {
-    private _dbModel: Model<InstanceType<T>>;
+    protected _dbModel: Model<InstanceType<T>>;
     constructor(dbModel: Model<InstanceType<T>>) {
         this._dbModel = dbModel;
     }
@@ -20,6 +20,11 @@ class RepositoryBase<T extends Typegoose> {
         return await this._dbModel.updateOne({ _id: _id }, item).exec();
     }
 
+    async partialUpdate(_id: Types.ObjectId, item: any) {
+        console.log(_id, item);
+        return await this._dbModel.updateOne({ _id: _id }, { $set: item }).exec();
+    }
+
     async delete(_id: string) {
         return await this._dbModel.remove({ _id: this.toObjectId(_id) }).exec();
     }
@@ -28,6 +33,9 @@ class RepositoryBase<T extends Typegoose> {
         return await this._dbModel.findById(_id).exec();
     }
 
+    async findOne() {
+        return await this._dbModel.findOne().exec();
+    }
 
     private toObjectId(_id: string): Types.ObjectId {
         return Types.ObjectId.createFromHexString(_id);

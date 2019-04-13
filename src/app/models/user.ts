@@ -4,7 +4,7 @@ enum Role {
     Client = "CLIENT",
     Studio = "STUDIO"
 }
-class User extends Typegoose {
+export class User extends Typegoose {
     @prop()
     name: String;
     @prop()
@@ -20,4 +20,3 @@ class User extends Typegoose {
     @prop()
     roles: Role[];
 }
-export default User;

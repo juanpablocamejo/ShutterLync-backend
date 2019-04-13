@@ -5,12 +5,14 @@ const router = express.Router();
 class ProjectRoutes {
     private _projectController: ProjectController;
 
-    constructor () {
+    constructor() {
         this._projectController = new ProjectController();
     }
-    get routes () {
+    get routes() {
         const controller = this._projectController;
         router.get("/projects/:_id", controller.findById);
+        router.post("/projects/:_id/orders", controller.saveOrder);
+
         return router;
     }
 
