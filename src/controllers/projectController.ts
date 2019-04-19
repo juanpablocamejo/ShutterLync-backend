@@ -12,7 +12,6 @@ class ProjectController {
             .then(result => res.json(result))
             .catch(err => res.status(404).json("no se encontró el proyecto"));
     }
-
     saveOrder = (req: Request, res: Response) => {
         this._projectService.saveOrder(req.params._id, req.body.order)
             .then(resultado => {

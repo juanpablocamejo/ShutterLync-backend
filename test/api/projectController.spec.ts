@@ -1,19 +1,20 @@
-
-import { should, expect } from "chai";
 import request from "supertest";
-import { resetDB, prepareDB } from "../helpers";
-import express = require("express");
+import { resetDB, prepareDB, prepareServer } from "../util/helpers";
+import ProjectRepository from "../../src/app/repositories/projectRepository";
+import { Project } from "../../src/app/models/project";
+import { InstanceType } from "typegoose";
 
-const app = express();
 jest.setTimeout(300000);
 
-describe("API", () => {
-    beforeEach(async () => { await prepareDB(); });
-    afterEach(resetDB);
+describe("project API", () => {
+    let app: any;
+    beforeAll(async () => { await prepareDB(); app = await prepareServer(); });
+    afterAll(resetDB);
 
     it("should return a project when request by id", async () => {
-        // const res = await request(app).get("/projects/5cb153c103fe6114104d7bf0");
-        // console.log(res.text);
-        // expect(res.status).equals(200);
+        const project: InstanceType<Project> = await new ProjectRepository().findOne();
+        const res = await request(app).get(`/projects/${project._id}`);
+        expect(JSON.stringify(project)).toEqual(JSON.stringify(res.body));
+        expect(res.status).toBe(200);
     });
 });

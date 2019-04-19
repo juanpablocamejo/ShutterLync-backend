@@ -1,7 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "emitDecoratorMetadata":true,
+        "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "module": "commonjs",
         "esModuleInterop": true,

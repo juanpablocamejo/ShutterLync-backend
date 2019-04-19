@@ -22,23 +22,24 @@ const createFile = async (filename: string) => {
     return img;
 };
 
-const loadImages = async (project: Project) => {
-    const files = fs.readdirSync(dirPath);
+const loadImages = async (project: Project, limit: number) => {
+    let files = fs.readdirSync(dirPath);
+    if (limit) { files = files.splice(0, limit - 1); }
     project.previewItems = await Promise.all(files.map(createFile));
 };
 
-const testProjectName = "Proyecto de prueba";
+const testProjectName = () => `Proyecto de prueba ${+new Date()}`;
 
 export const resetDB = async () => {
     await DataAccess.mongooseConnection.db.dropDatabase();
 };
 
-export const createTestProject = async () => {
+export const createTestProject = async (limit: number = undefined) => {
     const proj = new Project();
-    proj.title = testProjectName;
+    proj.title = testProjectName();
     const repo = new ProjectRepository();
     const id = (await repo.create(proj))._id;
-    await loadImages(proj);
+    await loadImages(proj, limit);
     await repo.update(id, proj);
 };
 

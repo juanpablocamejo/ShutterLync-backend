@@ -21,7 +21,6 @@ class RepositoryBase<T extends Typegoose> {
     }
 
     async partialUpdate(_id: Types.ObjectId, item: any) {
-        console.log(_id, item);
         return await this._dbModel.updateOne({ _id: _id }, { $set: item }).exec();
     }
 
@@ -36,7 +35,6 @@ class RepositoryBase<T extends Typegoose> {
     async findOne() {
         return await this._dbModel.findOne().exec();
     }
-
     private toObjectId(_id: string): Types.ObjectId {
         return Types.ObjectId.createFromHexString(_id);
     }

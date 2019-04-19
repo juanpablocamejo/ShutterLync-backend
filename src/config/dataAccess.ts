@@ -1,9 +1,9 @@
-import Mongoose from "mongoose";
+import Mongoose, { MongooseThenable } from "mongoose";
 import Environment from "./environment";
 
 class DataAccess {
     private static _mongooseConnection: Mongoose.Connection;
-    private static _mongooseInstance: any;
+    private static _mongooseInstance: MongooseThenable;
 
     private constructor() { }
 
@@ -16,13 +16,13 @@ class DataAccess {
         return this._mongooseInstance;
     }
 
-    public static connect(): Mongoose.Connection {
+    public static connect(uri: string = undefined): Mongoose.MongooseThenable {
         if (this._mongooseConnection) return;
         this._mongooseConnection = Mongoose.connection;
         this._mongooseConnection.once("open", () => {
             console.log("Conectado a mongodb.");
         });
-        this._mongooseInstance = Mongoose.connect(Environment.mongoDBUri, { useNewUrlParser: true } as Mongoose.ConnectionOptions);
+        this._mongooseInstance = Mongoose.connect(uri || Environment.mongoDBUri, { useNewUrlParser: true } as Mongoose.ConnectionOptions);
         return this._mongooseInstance;
     }
 
