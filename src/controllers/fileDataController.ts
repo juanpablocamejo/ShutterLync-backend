@@ -1,22 +1,29 @@
-import FileDataService from "../app/services/fileDataService";
+import FileDataService from "../services/FileDataService";
 import { Request, Response } from "express";
-import { FileData } from "../app/models/fileData";
-class FileDataController {
-    private _fileDataService: FileDataService;
+import { BaseController, IController } from "./BaseController";
+import { FileData } from "../models/FileData";
+
+export class FileDataController extends BaseController implements IController {
+    private fileDataService: FileDataService;
 
     constructor() {
-        this._fileDataService = new FileDataService();
+        super();
+        this.fileDataService = new FileDataService();
     }
-    findById = async (req: Request, res: Response) => {
+
+    initializeRoutes(): void {
+        this.get("/files/:_id", this.findById.bind(this));
+    }
+
+    async findById(req: Request, res: Response) {
         try {
-            const result = await this._fileDataService.findById(req.params._id);
+            const result = await this.fileDataService.findById(req.params._id);
             res.contentType(result.contentype.toString());
             res.end(result.data.buffer);
         }
         catch (err) {
             res.status(500).end();
         }
-    };
+    }
 
 }
-export default FileDataController;

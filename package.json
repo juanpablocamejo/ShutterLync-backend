@@ -3,23 +3,28 @@
   "version": "0.1.0",
   "description": "Aplicación de software libre para facilitar la gestión de servicios de fotografía",
   "scripts": {
-    "initialize-db": "tsc && node dist/initialization/index.js",
+    "initialize-db": "tsc && node dist/src/initialization/index.js",
     "start": "npm run tslint && nodemon src/index.ts",
     "build": "tsc",
     "test": "jest --forceExit --coverage",
     "watch-test": "npm run test -- --watchAll",
-    "tslint": "tslint -c tslint.json -p tsconfig.json"
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "debug": "tsc && nodemon --inspect src/initialization/index.ts"
   },
   "dependencies": {
     "@types/method-override": "0.0.31",
     "async": "^2.6.0",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "class-transformer": "^0.2.0",
+    "class-validator": "^0.9.1",
     "compression": "^1.7.1",
     "connect-mongo": "^2.0.0",
     "dotenv": "^4.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.16.2",
+    "express-list-endpoints": "^4.0.0",
+    "import-to-array": "^1.0.0",
     "inquirer-confirm": "^2.0.2",
     "jasmine": "^3.4.0",
     "lodash": "^4.17.5",
@@ -73,5 +78,5 @@
   "bugs": {
     "url": "https://github.com/juanpablocamejo/ShutterLync-backend/issues"
   },
-  "homepage": "https://github.com/juanpablocamejo/ShutterLync-backend#readme"
+  "homepage": "https://github.com/juanpablocamejo/ShutterLync#readme"
 }

@@ -20,7 +20,7 @@ class DataAccess {
         if (this._mongooseConnection) return;
         this._mongooseConnection = Mongoose.connection;
         this._mongooseConnection.once("open", () => {
-            console.log("Conectado a mongodb.");
+            // console.log("Conectado a mongodb.");
         });
         this._mongooseInstance = Mongoose.connect(uri || Environment.mongoDBUri, { useNewUrlParser: true } as Mongoose.ConnectionOptions);
         return this._mongooseInstance;

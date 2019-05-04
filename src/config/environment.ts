@@ -1,7 +1,8 @@
-import logger from "./logger";
+import { ShutterlyncLogger } from "./logger";
 import dotenv from "dotenv";
 import fs from "fs";
 
+const logger = ShutterlyncLogger.instance;
 class EnvironmentConfig {
     public static get environment() {
         return process.env.NODE_ENV;

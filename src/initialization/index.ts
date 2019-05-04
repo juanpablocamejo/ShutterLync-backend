@@ -1,5 +1,5 @@
 import DataAccess from "../config/dataAccess";
-import { createTestProject, resetDB } from "./initialization";
+import { createTestProject, resetDB } from "./Initialization";
 import Environment from "../config/environment";
 
 Environment.loadFile();
@@ -9,7 +9,6 @@ DataAccess.mongooseInstance.then(async () => {
     await resetDB();
     console.log("cargando datos de prueba");
     await createTestProject();
-    console.log("tarea finalizada.");
+    console.log("tarea finalizada. ");
     process.exit(0);
-
 });
