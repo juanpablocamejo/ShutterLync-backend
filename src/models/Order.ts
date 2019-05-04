@@ -9,7 +9,7 @@ import { OrderState } from "./enums/OrderState";
 export class Order extends BaseObject {
 
     @arrayProp({ items: OrderItem })
-    private _selectedItems: OrderItem[];
+    private _selectedItems: OrderItem[] = [];
 
     @prop({ enum: OrderState })
     private state: OrderState = OrderState.PENDING;
