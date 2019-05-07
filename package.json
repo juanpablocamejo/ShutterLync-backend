@@ -4,12 +4,11 @@
   "description": "Aplicación de software libre para facilitar la gestión de servicios de fotografía",
   "scripts": {
     "initialize-db": "tsc && node dist/src/initialization/index.js",
-    "start": "npm run tslint && nodemon src/index.ts",
+    "start": "nodemon -r ts-node/register src/index.ts",
     "build": "tsc",
-    "test": "jest --forceExit --coverage",
-    "watch-test": "npm run test -- --watchAll",
-    "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "debug": "tsc && nodemon --inspect src/initialization/index.ts"
+    "test": "jest --forceExit --verbose",
+    "test:watch": "npm run test -- --watchAll",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
     "@types/method-override": "0.0.31",
