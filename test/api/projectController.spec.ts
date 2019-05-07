@@ -5,6 +5,7 @@ import { Project } from "../../src/models/project";
 import { InstanceType } from "typegoose";
 import { User } from "../../src/models/User";
 import { UserRole } from "../../src/models/enums/UserRole";
+import { ProjectQueryDto } from "../../src/controllers/dto/ProjectQueryDto";
 
 jest.setTimeout(10000);
 
@@ -16,7 +17,7 @@ describe("project API", () => {
     it("should return a project when request by id", async () => {
         const project: InstanceType<Project> = await new ProjectRepository().findOne();
         const res = await request(app).get(`/projects/${project._id}`);
-        expect(JSON.stringify(project)).toEqual(JSON.stringify(res.body));
+        expect(JSON.stringify(new ProjectQueryDto().fromEntity(project))).toEqual(JSON.stringify(res.body));
         expect(res.status).toBe(200);
     });
 

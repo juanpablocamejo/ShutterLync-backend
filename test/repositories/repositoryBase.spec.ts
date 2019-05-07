@@ -74,4 +74,11 @@ describe("RepositoryBase", () => {
         expect(res.length).toBe(dbRes.length);
         expect(res.map(o => o._id)).toEqual(dbRes.map(o => o._id));
     });
+    it("should find persisted objects by pattern on criteria object", async () => {
+        const repo = anyRepo();
+
+        repo.create(new AnyModelClass({ anyProp: "email", anotherProp: "nombre" }));
+
+        repo.findLike({ anyProp: "ema" });
+    });
 });

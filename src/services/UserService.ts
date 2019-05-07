@@ -8,6 +8,13 @@ export class UserService {
         this.userRepository = new UserRepository();
     }
 
+    async findByText(text: string) {
+        return await this.userRepository.findLike({
+            name: text,
+            lastName: text,
+            email: text
+        });
+    }
     async create(user: User) {
         return await this.userRepository.create(user);
     }

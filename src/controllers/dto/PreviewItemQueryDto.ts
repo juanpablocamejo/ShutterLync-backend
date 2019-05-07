@@ -4,12 +4,12 @@ import { ObjectId } from "bson";
 
 export class PreviewItemQueryDto extends QueryDto<PreviewItem> {
     id: string;
-    fileDataId: string;
+    fileData: string;
     fileName: string;
     fromEntity(entity: PreviewItem): PreviewItemQueryDto {
         this.id = entity._id.toHexString();
         this.fileName = entity.filename;
-        this.fileDataId = (<ObjectId>entity.fileData).toHexString();
+        this.fileData = (<ObjectId>entity.fileData).toHexString();
         return this;
     }
     constructor(fields?: Partial<PreviewItemQueryDto>) {

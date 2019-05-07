@@ -3,6 +3,7 @@ import { CommandDto } from "./base/CommandDto";
 import { UserRole } from "../../models/enums/UserRole";
 import { IsString, Length, IsEmail, IsOptional, MaxLength, IsEnum } from "class-validator";
 
+
 export class UserCmdDto extends CommandDto<User> {
     @IsString() @Length(2, 200) name: string;
     @IsString() @Length(2, 200) lastName: string;

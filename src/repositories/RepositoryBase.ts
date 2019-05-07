@@ -41,6 +41,12 @@ export class RepositoryBase<T extends Typegoose> {
     async find(criteria: Partial<T>) {
         return await this.dbModel.find(criteria).exec();
     }
+    async findLike(criteria: { [P in keyof T]?: string }, limit?: number) {
+        const filter = Object.keys(criteria).map((k: string) => ({ [k]: new RegExp((<any>criteria)[k], "i") }));
+        const query = this.dbModel.find({ $or: filter });
+        if (limit) query.limit(8);
+        return await query.exec();
+    }
     async findOne() {
         return await this.dbModel.findOne().exec();
     }

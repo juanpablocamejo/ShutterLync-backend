@@ -31,6 +31,8 @@ export const prepareServer = async () => {
 export class AnyModelClass extends BaseObject {
     @prop()
     anyProp: any;
+    @prop()
+    anotherProp: any;
     constructor(fields?: Partial<AnyModelClass>) {
         super(fields);
     }
