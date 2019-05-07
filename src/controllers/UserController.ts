@@ -2,8 +2,9 @@ import { UserService } from "../services/UserService";
 import { Request, Response } from "express";
 import { BaseController } from "./BaseController";
 import { HttpException } from "../exceptions/HttpException";
+import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import { UserCmdDto } from "./dto/UserCmdDto";
-import { BaseError } from "../models/exceptions/BaseError";
+import { UserQueryDto } from "./dto/UserQueryDto";
 import { DuplicatedUserError } from "../models/exceptions/DuplicatedUserError";
 
 export class UserController extends BaseController {
@@ -16,7 +17,22 @@ export class UserController extends BaseController {
 
     initializeRoutes(): void {
         this.get("/auth", this.authenticate.bind(this));
+        this.get("/users", this.find.bind(this));
         this.post("/users", this.createUser.bind(this), UserCmdDto);
+    }
+
+    async find(req: Request, res: Response, next: Function) {
+        const { find } = req.query;
+        try {
+            const result = await this.userService.findByText(find);
+            res.json(result.map(usr => new UserQueryDto().fromEntity(usr)));
+        } catch (error) {
+            next(
+                new HttpExceptionBuilder(error)
+                    .message("no se pudo realizar la búsqueda")
+                    .build()
+            );
+        }
     }
 
     async createUser(req: Request, res: Response, next: Function) {
@@ -25,9 +41,12 @@ export class UserController extends BaseController {
             const usr = await this.userService.create(user);
             res.json(usr.id);
         } catch (err) {
-            const msg = err instanceof BaseError ? err.message : "no se pudo generar el usuario";
-            const code = err instanceof DuplicatedUserError ? 409 : undefined;
-            next(new HttpException(code || 500, msg));
+            next(
+                new HttpExceptionBuilder(err)
+                    .message("no se pudo crear el usuario")
+                    .when(DuplicatedUserError, 409)
+                    .build()
+            );
         }
     }
 

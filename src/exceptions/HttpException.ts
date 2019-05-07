@@ -1,3 +1,5 @@
+import { BaseError } from "../models/exceptions/BaseError";
+
 export class HttpException extends Error {
     status: number;
     message: string;
@@ -5,5 +7,10 @@ export class HttpException extends Error {
         super(message);
         this.status = status;
         this.message = message;
+    }
+
+    public static fromBaseError(error: BaseError, status: number = 500, message?: string) {
+        return new HttpException(status, message || error.message);
+
     }
 }

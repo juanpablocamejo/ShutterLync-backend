@@ -6,6 +6,7 @@ import { Project } from "../models/Project";
 import { BaseController } from "./BaseController";
 import { HttpException } from "../exceptions/HttpException";
 import { OrderCmdDto } from "./dto/OrderCmdDto";
+import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 
 export class ProjectController extends BaseController {
     private projectService: ProjectService;
@@ -22,12 +23,17 @@ export class ProjectController extends BaseController {
         this.post("/projects/:projectId/orders", this.saveOrder.bind(this), OrderCmdDto);
     }
 
-    findById(req: Request, res: Response) {
-        this.projectService.findById(req.params._id)
-            .then(
-                result => { res.json(result); }
-            )
-            .catch(err => res.status(404).json("no se encontró el proyecto"));
+    async findById(req: Request, res: Response, next: Function) {
+        try {
+            const result = await this.projectService.findById(req.params._id);
+            res.json(new ProjectQueryDto().fromEntity(result));
+        } catch (err) {
+            next(
+                new HttpExceptionBuilder(err)
+                    .message("no se pudo obtener el proyecto")
+                    .build()
+            );
+        }
     }
 
     find(req: Request, res: Response) {
