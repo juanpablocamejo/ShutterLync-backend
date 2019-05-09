@@ -6,6 +6,7 @@ import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import { UserCmdDto } from "./dto/UserCmdDto";
 import { UserQueryDto } from "./dto/UserQueryDto";
 import { DuplicatedUserError } from "../models/exceptions/DuplicatedUserError";
+import { AuthenticationException } from "../models/exceptions/AuthenticationException";
 
 export class UserController extends BaseController {
     private userService: UserService;
@@ -54,8 +55,12 @@ export class UserController extends BaseController {
         const { email, password } = req.params;
         try {
             res.json(await this.userService.authenticate(email, password));
-        } catch {
-            next(new HttpException(403, "Usuario o contraseña inválidos"));
+        } catch (err) {
+            next(new HttpExceptionBuilder(err)
+                .message("no se pudo authenticar el usuario")
+                .when(AuthenticationException, 403)
+                .build()
+            );
         }
     }
 }

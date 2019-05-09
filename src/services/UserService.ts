@@ -1,5 +1,6 @@
 import { UserRepository } from "../repositories/UserRepository";
 import { User } from "../models/User";
+import { AuthenticationException } from "../models/exceptions/AuthenticationException";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -20,6 +21,9 @@ export class UserService {
     }
 
     async authenticate(email: string, password: string) {
-        return await this.userRepository.findOne();
+        const result = await this.userRepository.find({ email });
+        if (result.length === 0) {
+            throw new AuthenticationException();
+        }
     }
 }

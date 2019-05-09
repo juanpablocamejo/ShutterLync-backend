@@ -36,19 +36,22 @@ export class ProjectController extends BaseController {
         }
     }
 
-    find(req: Request, res: Response) {
+    async find(req: Request, res: Response, next: Function) {
         const { clientId } = req.query;
         const successHandler = (projects: Project[]) => {
             const dtos = projects.map((p) => new ProjectQueryDto().fromEntity(p));
             res.json(dtos);
         };
-        if (clientId) {
-            this.projectService.findByClient(clientId)
-                .then(successHandler, () => res.status(500));
-        }
-        else {
-            this.projectService.getAll()
-                .then(successHandler, () => res.status(500));
+        let projects: Project[];
+        try {
+            if (clientId) { projects = await this.projectService.findByClient(clientId); }
+            else { projects = await this.projectService.getAll(); }
+        } catch (error) {
+            next(
+                new HttpExceptionBuilder(error)
+                    .message("no se pudo obtener los proyectos")
+                    .build()
+            );
         }
 
     }
@@ -58,8 +61,12 @@ export class ProjectController extends BaseController {
             const result = await this.projectService.create(project);
             res.json(result.id);
         }
-        catch {
-            next(new HttpException(500, "no se pudo crear el proyecto"));
+        catch (error) {
+            next(
+                new HttpExceptionBuilder(error)
+                    .message("no se pudo crear el proyecto")
+                    .build()
+            );
         }
 
     }
@@ -69,7 +76,11 @@ export class ProjectController extends BaseController {
             const result = await this.projectService.saveOrder(dto.projectId, dto.toEntity());
             res.status(200).end();
         } catch (error) {
-            next(new HttpException(500, "no se pudo cargar la orden"));
+            next(
+                new HttpExceptionBuilder(error)
+                    .message("no se pudo cargar el pedido")
+                    .build()
+            );
         }
     }
 }

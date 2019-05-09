@@ -1,3 +1,3 @@
-export * from "./FileDataController";
+export * from "./FilesController";
 export * from "./ProjectController";
 export * from "./UserController";
