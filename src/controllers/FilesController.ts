@@ -8,6 +8,7 @@ import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import Environment from "../config/environment";
 import { Binary } from "mongodb";
 import fs from "fs";
+import { PreviewItemQueryDto } from "./dto/PreviewItemQueryDto";
 
 
 export class FilesController extends BaseController implements IController {
@@ -52,11 +53,11 @@ export class FilesController extends BaseController implements IController {
         try {
             const { projectId } = req.body;
             const { uploadsDir } = Environment;
-            const { filename, mimetype } = req.file;
+            const { originalname, filename, mimetype } = req.file;
             const fileData = await this.createFileDataFrom(uploadsDir, filename, mimetype);
-            const newItem = new PreviewItem({ filename: filename });
+            const newItem = new PreviewItem({ filename: originalname });
             const result = await this.previewItemService.create(projectId, newItem, fileData);
-            res.json(result);
+            res.json(new PreviewItemQueryDto().fromEntity(result));
         } catch (err) {
             next(
                 new HttpExceptionBuilder(err)

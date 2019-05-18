@@ -1,4 +1,4 @@
-import { Ref, arrayProp, prop } from "typegoose";
+import { Ref, arrayProp, prop, instanceMethod } from "typegoose";
 import { PreviewItem } from "./PreviewItem";
 import { BaseObject } from "./base/BaseObject";
 import { InvalidOperationError } from "./exceptions/InvalidOperationError";
@@ -31,20 +31,20 @@ export class Order extends BaseObject {
     get selectedItems(): OrderItem[] {
         return this._selectedItems;
     }
-
+    @instanceMethod
     addItem(orderItem: OrderItem): void {
         this._selectedItems.push(orderItem);
     }
-
+    @instanceMethod
     removeItem(orderItem: OrderItem): void {
         this._selectedItems = this._selectedItems.filter(itm => itm.previewItem != orderItem.previewItem);
     }
-
+    @instanceMethod
     confirm(): void {
         if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido ya fué confirmado anteriormente.");
         this.state = OrderState.CONFIRMED;
     }
-
+    @instanceMethod
     complete() {
         if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido aún no fué confirmado por el usuario.");
         this.state = OrderState.COMPLETED;

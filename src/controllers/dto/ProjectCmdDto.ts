@@ -1,9 +1,7 @@
 import { Project } from "../../models/Project";
-import { User } from "../../models/User";
 import { CommandDto } from "./base/CommandDto";
-import { UserRole } from "../../models/enums/UserRole";
-import { IsMongoId, IsString, MaxLength, IsEmail, Length, IsOptional, IsNumber, IsDateString } from "class-validator";
-import { ObjectId } from "mongodb";
+import { IsString, MaxLength, IsEmail, Length, IsOptional, IsNumber, IsDateString } from "class-validator";
+import { Client } from "../../models/Client";
 
 export class ProjectCmdDto extends CommandDto<Project> {
     @IsString() @Length(3, 300) title: string;
@@ -12,7 +10,11 @@ export class ProjectCmdDto extends CommandDto<Project> {
     @IsString() @MaxLength(3000) @IsOptional() notes: string;
     @IsNumber() quotation: number;
     @IsNumber() aditionalItemPrice: number;
-    @IsMongoId() clientId: string;
+    @IsString() @Length(2, 200) clientName: string;
+    @IsString() @Length(2, 200) clientLastName: string;
+    @IsEmail() clientEmail: string;
+    @IsString() @MaxLength(500) clientLocation: string;
+    @IsNumber() quantity: number;
 
     toEntity(): Project {
         return new Project({
@@ -20,7 +22,16 @@ export class ProjectCmdDto extends CommandDto<Project> {
             date: new Date(this.date),
             location: this.location,
             notes: this.notes,
-            client: new ObjectId(this.clientId)
+            quantity: this.quantity,
+            quotation: this.quotation,
+            aditionalItemPrice: this.aditionalItemPrice,
+            client: new Client({
+                email: this.clientEmail,
+                name: this.clientName,
+                lastName: this.clientLastName,
+                location: this.clientLocation,
+            }),
+
         });
     }
 }

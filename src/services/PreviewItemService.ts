@@ -21,8 +21,6 @@ export class PreviewItemService {
     async create(projectId: string, item: PreviewItem, fileData: FileData) {
         const fData = await this.fileDataRepository.create(fileData);
         item.fileData = fData._id;
-        const project = await this.projectRepository.findById(projectId);
-        project.addPreviewItem(item);
-        this.projectRepository.update(project._id, project);
+        return await this.projectRepository.addPreviewItem(projectId, item);
     }
 }

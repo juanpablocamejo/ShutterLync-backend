@@ -37,15 +37,16 @@ export class ProjectController extends BaseController {
     }
 
     async find(req: Request, res: Response, next: Function) {
-        const { clientId } = req.query;
+        const { clientEmail } = req.query;
         const successHandler = (projects: Project[]) => {
             const dtos = projects.map((p) => new ProjectQueryDto().fromEntity(p));
             res.json(dtos);
         };
         let projects: Project[];
         try {
-            if (clientId) { projects = await this.projectService.findByClient(clientId); }
+            if (clientEmail) { projects = await this.projectService.findByClient(clientEmail); }
             else { projects = await this.projectService.getAll(); }
+            successHandler(projects);
         } catch (error) {
             next(
                 new HttpExceptionBuilder(error)

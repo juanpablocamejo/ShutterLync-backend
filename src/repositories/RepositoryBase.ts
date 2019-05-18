@@ -1,6 +1,7 @@
 
 import { Typegoose, InstanceType } from "typegoose";
 import { Model, Types } from "mongoose";
+import { ObjectId } from "mongodb";
 class UpdateResult {
     ok: number;
     n: number;
@@ -23,7 +24,7 @@ export class RepositoryBase<T extends Typegoose> {
 
     async update(_id: Types.ObjectId, item: T): Promise<UpdateResult> {
         try {
-            return await this.dbModel.update({ _id }, item, { overwrite: true }).exec();
+            return await this.dbModel.update({ _id }, item).exec();
 
         } catch (err) {
             console.log(err);
@@ -36,7 +37,7 @@ export class RepositoryBase<T extends Typegoose> {
     }
 
     async findById(_id: string) {
-        return await this.dbModel.findById(_id).exec();
+        return await this.dbModel.findById(new ObjectId(_id)).exec();
     }
     async find(criteria: Partial<T>) {
         return await this.dbModel.find(criteria).exec();
@@ -44,7 +45,7 @@ export class RepositoryBase<T extends Typegoose> {
     async findLike(criteria: { [P in keyof T]?: string }, limit?: number) {
         const filter = Object.keys(criteria).map((k: string) => ({ [k]: new RegExp((<any>criteria)[k], "i") }));
         const query = this.dbModel.find({ $or: filter });
-        if (limit) query.limit(8);
+        if (limit) query.limit(limit || 8);
         return await query.exec();
     }
     async findOne() {

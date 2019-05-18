@@ -9,6 +9,7 @@ import mime from "mime";
 import { ProjectRepository } from "../repositories/ProjectRepository";
 import { User } from "../models/User";
 import { UserRole } from "../models/enums/UserRole";
+import { Client } from "../models/Client";
 
 const dirPath = "../backend/samples";
 const createFile = async (filename: string) => {
@@ -35,17 +36,14 @@ export const resetDB = async () => {
     await DataAccess.mongooseConnection.db.dropDatabase();
 };
 
-export const createClient = async () => {
+export const createClient = (): Client => {
     const prefix = `cli_${+new Date()}`;
-    const user = new User({
-        role: UserRole.CLIENT,
+    return new Client({
         email: `${prefix}@gmail.com`,
-        confirmed: true,
         name: `${prefix}_name`,
-        lastName: `${prefix}_lastName`
+        lastName: `${prefix}_lastName`,
+        location: `${prefix}_location`,
     });
-    const client = await user.getModelForClass(User).create(user);
-    return client;
 };
 
 export const createPhotographer = async () => {
@@ -55,7 +53,8 @@ export const createPhotographer = async () => {
         email: `${prefix}@gmail.com`,
         confirmed: true,
         name: `${prefix}_name`,
-        lastName: `${prefix}_lastName`
+        lastName: `${prefix}_lastName`,
+        location: `${prefix}_location`
     });
     const photographer = await user.getModelForClass(User).create(user);
     return photographer;
@@ -64,7 +63,7 @@ export const createPhotographer = async () => {
 export const createTestProject = async (imgs: number = undefined) => {
     let proj = new Project();
     proj.title = testProjectName();
-    proj.client = (await createClient())._id;
+    proj.client = createClient();
     proj.owner = (await createPhotographer())._id;
     const repo = new ProjectRepository();
     try {

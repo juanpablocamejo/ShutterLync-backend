@@ -20,10 +20,11 @@ export class UserService {
         return await this.userRepository.create(user);
     }
 
-    async authenticate(email: string, password: string) {
+    async authenticate(email: string, password: string): Promise<User> {
         const result = await this.userRepository.find({ email });
         if (result.length === 0) {
             throw new AuthenticationException();
         }
+        return result[0];
     }
 }

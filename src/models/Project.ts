@@ -5,10 +5,11 @@ import { User } from "./User";
 import { Order } from "./Order";
 import { OrderItem } from "./OrderItem";
 import { BaseObject } from "./base/BaseObject";
+import { Client } from "./Client";
 
 export class Project extends BaseObject {
     @prop()
-    private _order: Order = new Order();
+    private _order: Order;
 
     @arrayProp({ items: PreviewItem })
     private _previewItems: PreviewItem[] = [];
@@ -26,6 +27,9 @@ export class Project extends BaseObject {
     public notes: string;
 
     @prop()
+    public quantity: number;
+
+    @prop()
     public quotation: number;
 
     @prop()
@@ -34,8 +38,8 @@ export class Project extends BaseObject {
     @prop({ ref: User })
     public owner: Ref<User>;
 
-    @prop({ ref: User })
-    public client: Ref<User>;
+    @prop()
+    public client: Client;
 
     constructor(fields?: Partial<Project>) {
         super(fields);
@@ -52,17 +56,24 @@ export class Project extends BaseObject {
     }
 
     @instanceMethod
-    public removeFromOrder(orderItem: OrderItem) {
-        this._order.removeItem(orderItem);
-
-    }
     public removePreviewItem(item: PreviewItem) {
         this._previewItems = this._previewItems.filter((elem: PreviewItem) => !elem.equals(item));
     }
 
     @instanceMethod
     public addToOrder(orderItem: OrderItem) {
+        this._order = this._order || new Order();
         this._order.addItem(orderItem);
+    }
+
+    @instanceMethod
+    public removeFromOrder(orderItem: OrderItem) {
+        this._order && this._order.removeItem(orderItem);
+    }
+
+    @instanceMethod
+    public lastPreviewItem(): PreviewItem {
+        return this._previewItems.length ? this._previewItems[this._previewItems.length - 1] : undefined;
     }
 
     @prop()

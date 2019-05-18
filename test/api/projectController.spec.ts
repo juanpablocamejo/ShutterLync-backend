@@ -21,17 +21,17 @@ describe("project API", () => {
         expect(res.status).toBe(200);
     });
 
-    it("should return the project list when request by clientid", async () => {
-        try {
-            const clientId = (await new ProjectRepository().findOne()).client;
-            console.log(clientId);
-            const res = await request(app).get(`/projects?clientId=${clientId}`);
-            expect(res.status).toBe(200);
-            expect(res.body[0].title).toBeDefined();
-        } catch (e) {
-            console.log(e);
-            throw e;
-        }
+    it("should return the project list when request by client email", async () => {
+        const client = (await new ProjectRepository().findOne()).client;
+        const res = await request(app).get(`/projects?clientEmail=${client.email}`);
+        expect(res.status).toBe(200);
+        expect(res.body[0].title).toBeDefined();
+    });
 
+    it("should return the project list when request by client email", async () => {
+        const client = (await new ProjectRepository().findOne()).client;
+        const res = await request(app).get(`/projects?clientEmail=${client.email}`);
+        expect(res.status).toBe(200);
+        expect(res.body[0].title).toBeDefined();
     });
 });
