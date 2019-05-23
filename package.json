@@ -6,7 +6,7 @@
     "initialize-db": "tsc && node dist/src/initialization/index.js",
     "start": "nodemon -r ts-node/register src/index.ts",
     "build": "tsc",
-    "test": "jest --forceExit --verbose",
+    "test": "tsc && jest --forceExit --verbose",
     "test:watch": "npm run test -- --watchAll",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
