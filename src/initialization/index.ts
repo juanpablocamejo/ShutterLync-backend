@@ -1,5 +1,5 @@
 import DataAccess from "../config/dataAccess";
-import { createTestProject, resetDB } from "./Initialization";
+import { createTestProject, resetDB } from "./initialization";
 import Environment from "../config/environment";
 
 Environment.loadFile();

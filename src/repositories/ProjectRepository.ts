@@ -1,7 +1,7 @@
 import { RepositoryBase } from "./RepositoryBase";
-import { Project } from "../models/project";
+import { Project } from "../models/Project";
 import { ObjectId } from "bson";
-import { PreviewItem } from "../models/previewItem";
+import { PreviewItem } from "../models/PreviewItem";
 
 export class ProjectRepository extends RepositoryBase<Project> {
     constructor() {

@@ -2,7 +2,7 @@ import { ProjectRepository } from "../repositories/ProjectRepository";
 import { ObjectId } from "mongodb";
 import { Order } from "../models/Order";
 import { PreviewItem } from "../models/PreviewItem";
-import { Project } from "../models/project";
+import { Project } from "../models/Project";
 import { plainToClass } from "class-transformer";
 
 class ProjectService {

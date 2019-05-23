@@ -3,7 +3,7 @@ import { BaseController, IController } from "./BaseController";
 import { FileData } from "../models/FileData";
 import multer from "multer";
 import { PreviewItemService } from "../services/PreviewItemService";
-import { PreviewItem } from "../models/previewItem";
+import { PreviewItem } from "../models/PreviewItem";
 import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import Environment from "../config/environment";
 import { Binary } from "mongodb";
