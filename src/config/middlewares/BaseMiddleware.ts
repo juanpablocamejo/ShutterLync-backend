@@ -2,12 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
 import importToArray from "import-to-array";
-import { plainToClassFromExist, plainToClass } from "class-transformer";
 import { Cors } from "./CorsMiddleware";
 import * as allControllers from "../../controllers";
 import _ from "lodash";
-import { IController, BaseController } from "../../controllers/BaseController";
-import { ClassType } from "class-transformer/ClassTransformer";
 import { ErrorMiddleware } from "./ErrorMiddleware";
 
 const controllers = importToArray(allControllers);
