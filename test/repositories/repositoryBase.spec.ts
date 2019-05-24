@@ -1,5 +1,5 @@
 import { prepareDB, AnyModelClass } from "../util/helpers";
-import { RepositoryBase } from "../../src/repositories/repositoryBase";
+import { RepositoryBase } from "../../src/repositories/RepositoryBase";
 
 
 describe("RepositoryBase", () => {

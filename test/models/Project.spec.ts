@@ -1,5 +1,5 @@
-import { Project } from "../../src/models/project";
-import { PreviewItem } from "../../src/models/previewItem";
+import { Project } from "../../src/models/Project";
+import { PreviewItem } from "../../src/models/PreviewItem";
 import { ObjectId } from "mongodb";
 import { OrderItem } from "../../src/models/OrderItem";
 

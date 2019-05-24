@@ -1,6 +1,6 @@
 import { prepareDB } from "../util/helpers";
 import { ProjectRepository } from "../../src/repositories/ProjectRepository";
-import { PreviewItem } from "../../src/models/previewItem";
+import { PreviewItem } from "../../src/models/PreviewItem";
 import { ObjectId } from "bson";
 import ProjectService from "../../src/services/ProjectService";
 

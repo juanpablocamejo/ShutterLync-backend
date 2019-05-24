@@ -1,7 +1,7 @@
 import request from "supertest";
 import { resetDB, prepareDB, prepareServer } from "../util/helpers";
-import { ProjectRepository } from "../../src/repositories/projectRepository";
-import { Project } from "../../src/models/project";
+import { ProjectRepository } from "../../src/repositories/ProjectRepository";
+import { Project } from "../../src/models/Project";
 import { InstanceType } from "typegoose";
 import { User } from "../../src/models/User";
 import { UserRole } from "../../src/models/enums/UserRole";
