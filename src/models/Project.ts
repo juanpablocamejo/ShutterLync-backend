@@ -1,6 +1,6 @@
 import { prop, Ref, arrayProp, instanceMethod } from "typegoose";
 import _ from "lodash";
-import { PreviewItem } from "./previewItem";
+import { PreviewItem } from "./PreviewItem";
 import { User } from "./User";
 import { Order } from "./Order";
 import { OrderItem } from "./OrderItem";

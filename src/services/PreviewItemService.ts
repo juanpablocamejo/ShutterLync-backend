@@ -2,7 +2,7 @@ import { FileDataRepository } from "../repositories/FileDataRepository";
 import { FileData } from "../models/FileData";
 import { Binary } from "bson";
 import fs from "fs";
-import { PreviewItem } from "../models/previewItem";
+import { PreviewItem } from "../models/PreviewItem";
 import { ProjectRepository } from "../repositories/ProjectRepository";
 
 export class PreviewItemService {
