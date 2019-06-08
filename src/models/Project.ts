@@ -6,6 +6,7 @@ import { Order } from "./Order";
 import { OrderItem } from "./OrderItem";
 import { BaseObject } from "./base/BaseObject";
 import { Client } from "./Client";
+import { ProjectState } from "./enums/ProjectState";
 
 export class Project extends BaseObject {
     @prop()
@@ -16,6 +17,9 @@ export class Project extends BaseObject {
 
     @prop({ required: true })
     public title: string;
+
+    @prop({ required: true })
+    public state: ProjectState = ProjectState.CREATED;
 
     @prop()
     public date: Date;

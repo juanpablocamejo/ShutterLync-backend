@@ -5,11 +5,13 @@ export class ErrorMiddleware {
     middleware = (error: HttpException, request: Request, response: Response, next: NextFunction) => {
         const status = error.status || 500;
         const message = error.message || "Error inesperado";
+        const showMessage = !!error.showMsg;
         response
             .status(status)
             .json({
                 status,
                 message,
+                showMessage
             });
     }
 }

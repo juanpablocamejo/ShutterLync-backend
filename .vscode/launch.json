@@ -13,10 +13,9 @@
                 "-r",
                 "ts-node/register",
             ],
-            "outFiles": [
-                "${workspaceFolder}/dist/src/index.js"
+            "args": [
+                "${workspaceFolder}/src/index.ts"
             ],
-            "program": "${workspaceFolder}/src/index.ts",
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
@@ -30,10 +29,9 @@
                 "-r",
                 "ts-node/register",
             ],
-            "outFiles": [
-                "${workspaceFolder}/dist/src/initialization/index.js"
+            "args": [
+                "${workspaceFolder}/src/initialization/index.ts"
             ],
-            "program": "${workspaceFolder}/src/initialization/index.ts",
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",

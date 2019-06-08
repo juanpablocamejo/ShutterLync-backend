@@ -1,20 +1,28 @@
 import { ShutterlyncLogger } from "./logger";
 import dotenv from "dotenv";
 import fs from "fs";
+import { ConfigKey } from "./ConfigKey";
 
 const logger = ShutterlyncLogger.instance;
 class EnvironmentConfig {
-    public static get environment() {
+
+    static get openUrls(): string[] {
+        return ["/auth"];
+    }
+    static get(key: ConfigKey) {
+        return process.env[key];
+    }
+    static get environment() {
         return process.env.NODE_ENV;
     }
-    public static get uploadsDir() {
+    static get uploadsDir() {
         return process.env.UPLOADS_DIR;
     }
-    public static get mongoDBUri(): string {
+    static get mongoDBUri(): string {
         return (this.environment === "production") ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
     }
 
-    public static get allowedOrigins(): RegExp[] {
+    static get allowedOrigins(): RegExp[] {
         return [
             /^https?:\/\/localhost:/,
             /^https?:\/\/shutterlync.herokuapp.com/

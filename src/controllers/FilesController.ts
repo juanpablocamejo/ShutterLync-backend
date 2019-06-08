@@ -8,8 +8,7 @@ import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import Environment from "../config/environment";
 import { Binary } from "mongodb";
 import fs from "fs";
-import { PreviewItemQueryDto } from "./dto/PreviewItemQueryDto";
-
+import { PreviewItemQueryDto } from "../dto/PreviewItemQueryDto";
 
 export class FilesController extends BaseController implements IController {
     private previewItemService: PreviewItemService;

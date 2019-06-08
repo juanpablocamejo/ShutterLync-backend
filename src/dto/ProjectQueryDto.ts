@@ -1,12 +1,14 @@
-import { Project } from "../../models/Project";
+import { Project } from "../models/Project";
 import { QueryDto } from "./base/QueryDto";
 import { PreviewItemQueryDto } from "./PreviewItemQueryDto";
 import { OrderQueryDto } from "./OrderQueryDto";
 import { ClientQueryDto } from "./ClientQueryDto";
+import { ProjectState } from "../models/enums/ProjectState";
 
 export class ProjectQueryDto extends QueryDto<Project> {
     id: string;
     title: string;
+    state: ProjectState;
     date: Date;
     notes: string;
     location: string;
@@ -24,6 +26,7 @@ export class ProjectQueryDto extends QueryDto<Project> {
     fromEntity(entity: Project): ProjectQueryDto {
         this.id = entity._id.toHexString();
         this.title = entity.title;
+        this.state = entity.state;
         this.date = entity.date;
         this.notes = entity.notes;
         this.quotation = entity.quotation;

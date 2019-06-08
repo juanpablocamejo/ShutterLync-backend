@@ -1,6 +1,5 @@
-import { RepositoryBase } from "./RepositoryBase";
+import { RepositoryBase, TypeMapper } from "./RepositoryBase";
 import { Project } from "../models/Project";
-import { ObjectId } from "bson";
 import { PreviewItem } from "../models/PreviewItem";
 
 export class ProjectRepository extends RepositoryBase<Project> {

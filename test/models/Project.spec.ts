@@ -37,8 +37,8 @@ describe("Project", () => {
         // act
         proj.addToOrder(orderItem);
         // assert
-        expect(proj.order.selectedItems.length).toBe(1);
-        expect(proj.order.selectedItems[0]).toBe(orderItem);
+        expect(proj.order.orderItems.length).toBe(1);
+        expect(proj.order.orderItems[0]).toBe(orderItem);
     });
     it("removeFromOrder should remove an item from the project´s order", () => {
         // arrange
@@ -50,6 +50,6 @@ describe("Project", () => {
         // act
         proj.removeFromOrder(orderItem);
         // assert
-        expect(proj.order.selectedItems.length).toBe(0);
+        expect(proj.order.orderItems.length).toBe(0);
     });
 });

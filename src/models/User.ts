@@ -16,7 +16,7 @@ export class User extends BaseObject {
     @prop({ enum: UserRole })
     role: UserRole;
     @prop({ required: true })
-    confirmed: Boolean = false;
+    confirmed: boolean;
 
     constructor(fields?: Partial<User>) {
         super(fields);

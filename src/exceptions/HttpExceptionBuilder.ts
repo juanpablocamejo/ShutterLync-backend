@@ -1,38 +1,53 @@
 import { BaseError } from "../models/exceptions/BaseError";
 import { HttpException } from "./HttpException";
 export class HttpExceptionBuilder {
-    private _httpException?: HttpException;
-    private _baseError: BaseError;
-    private _defaultMsg: string;
+    private _baseError: any;
+    private _status: number;
+    private _info: string;
+    private _showMsg: boolean;
+    private _message: string;
 
     constructor(err: any) {
         this._baseError = err;
-        this._defaultMsg = "No se pudo completar la operación";
+        this._status = 500;
+        this._message = "No se pudo completar la operación";
+        if (this.isBaseError || this.isHttpException) this._info = err.message;
+        if (this.isHttpException) { this._status = err.status; this._showMsg = err.showMsg; }
+    }
+
+    public get isHttpException() {
+        return this._baseError instanceof HttpException;
+    }
+    public get isError() {
+        return this._baseError instanceof Error;
+    }
+
+    public get isBaseError() {
+        return this._baseError instanceof BaseError;
     }
 
     public message(message: string) {
-        this._defaultMsg = message;
+        this._message = message;
         return this;
     }
-    public when(errType: new () => BaseError, status: number = 500, message?: string): HttpExceptionBuilder {
+
+    public showMessage() {
+        this._showMsg = true;
+        return this;
+    }
+
+    public when(errType: new () => Error, status?: number, info?: string, showMsg?: boolean): HttpExceptionBuilder {
         if (this._baseError instanceof errType) {
-            const msg = message || this._baseError.message;
-            this._httpException = HttpException.fromBaseError(
-                this._baseError,
-                status,
-                this._defaultMsg + (msg ? `: ${msg}` : "")
-            );
+            if (status) this._status = status;
+            if (info) this._info = info;
+            if (showMsg) this._showMsg = showMsg;
         }
         return this;
     }
+
     public build() {
-        if (this._httpException)
-            return this._httpException;
-        else {
-            return this._baseError instanceof BaseError
-                ? HttpException.fromBaseError(this._baseError, 500, this.defaultMessage()) :
-                new HttpException(500, this._defaultMsg);
-        }
+        console.log(this._baseError);
+        return new HttpException(this._status, this.getMessage(), this._showMsg);
     }
-    private defaultMessage() { return this._defaultMsg + (this._baseError.message ? `: ${this._baseError.message}` : ""); }
+    private getMessage() { return this._message + (this._info ? `: ${this._info}` : ""); }
 }

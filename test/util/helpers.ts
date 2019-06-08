@@ -7,15 +7,25 @@ import { MongoMemServer } from "./mongoMemServer";
 import { BaseObject } from "../../src/models/base/BaseObject";
 import { prop } from "typegoose";
 import _ from "lodash";
-
+import { UserController } from "../../src/controllers/UserController";
+import { UserRepository } from "../../src/repositories/UserRepository";
+import { User } from "../../src/models/User";
+import { UserQueryDto } from "../../src/dto/UserQueryDto";
 mongoose.Promise = global.Promise;
+
+
+export const validPassword = () => "0q38974gahoiugh4e0g";
 
 export const prepareDB = async () => {
     const mongoUri = await MongoMemServer.instance.getConnectionString();
     const conn = await DataAccess.connect(mongoUri);
-    await createTestProject(1);
-    await createTestProject(1);
+    await createTestProject(1, validPassword());
+    await createTestProject(1, validPassword());
     return conn;
+};
+
+export const getUserToken = (user: User) => {
+    return new UserController().getAuthDto(user).token;
 };
 
 export const resetDB = async () => await DataAccess.mongooseConnection.db.dropDatabase();

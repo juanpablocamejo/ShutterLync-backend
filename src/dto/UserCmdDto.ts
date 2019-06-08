@@ -1,6 +1,6 @@
-import { User } from "../../models/User";
+import { User } from "../models/User";
 import { CommandDto } from "./base/CommandDto";
-import { UserRole } from "../../models/enums/UserRole";
+import { UserRole } from "../models/enums/UserRole";
 import { IsString, Length, IsEmail, IsOptional, MaxLength, IsEnum } from "class-validator";
 
 

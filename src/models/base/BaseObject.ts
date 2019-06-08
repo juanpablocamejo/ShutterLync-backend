@@ -9,6 +9,7 @@ export abstract class BaseObject extends Typegoose implements IEquatable {
     @prop({ required: true, default: Date.now })
     createdAt: Date;
 
+
     protected constructor(fields?: Partial<BaseObject>) {
         super();
         this.init(fields);

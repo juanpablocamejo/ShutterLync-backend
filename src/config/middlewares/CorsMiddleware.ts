@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import environment from "../environment";
+import { IMiddlewareClass } from "./MiddlewareConfig";
 
 
-export class Cors {
+export class Cors implements IMiddlewareClass {
 
     middleware(req: Request, res: Response, next: NextFunction) {
         const origin = req.header("origin");
@@ -10,7 +11,7 @@ export class Cors {
         if (!allowed) { next(); return; }
 
         res.header("Access-Control-Allow-Origin", origin);
-        res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+        res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
 
         // intercept OPTIONS method

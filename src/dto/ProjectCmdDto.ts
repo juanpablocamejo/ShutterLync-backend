@@ -1,7 +1,7 @@
-import { Project } from "../../models/Project";
+import { Project } from "../models/Project";
 import { CommandDto } from "./base/CommandDto";
 import { IsString, MaxLength, IsEmail, Length, IsOptional, IsNumber, IsDateString } from "class-validator";
-import { Client } from "../../models/Client";
+import { Client } from "../models/Client";
 
 export class ProjectCmdDto extends CommandDto<Project> {
     @IsString() @Length(3, 300) title: string;
@@ -12,7 +12,7 @@ export class ProjectCmdDto extends CommandDto<Project> {
     @IsNumber() aditionalItemPrice: number;
     @IsString() @Length(2, 200) clientName: string;
     @IsString() @Length(2, 200) clientLastName: string;
-    @IsEmail() clientEmail: string;
+    @IsString() clientEmail: string;
     @IsString() @MaxLength(500) clientLocation: string;
     @IsNumber() quantity: number;
 

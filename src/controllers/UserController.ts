@@ -1,11 +1,17 @@
 import { UserService } from "../services/UserService";
+import { AuthResultDto } from "../dto/AuthResultDto";
 import { Request, Response } from "express";
 import { BaseController } from "./BaseController";
 import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
-import { UserCmdDto } from "./dto/UserCmdDto";
-import { UserQueryDto } from "./dto/UserQueryDto";
+import { UserCmdDto } from "../dto/UserCmdDto";
+import { UserQueryDto } from "../dto/UserQueryDto";
 import { DuplicatedUserError } from "../models/exceptions/DuplicatedUserError";
-import { AuthenticationException } from "../models/exceptions/AuthenticationException";
+import { AuthenticationError } from "../models/exceptions/AuthenticationError";
+import { AuthResultStatus } from "../models/enums/AuthResultStatus";
+import jwt from "jsonwebtoken";
+import env from "../config/environment";
+import { ConfigKey } from "../config/ConfigKey";
+import { User } from "../../src/models/User";
 
 
 export class UserController extends BaseController {
@@ -53,17 +59,31 @@ export class UserController extends BaseController {
         }
     }
 
+    getAuthDto(usr: User) {
+        const usrDto = new UserQueryDto().fromEntity(usr);
+        const secret = env.get(ConfigKey.JWT_SECRET);
+        return new AuthResultDto({
+            status: AuthResultStatus.OK,
+            token: jwt.sign({ ...usrDto }, secret),
+            user: usrDto
+        });
+    }
     async authenticate(req: Request, res: Response, next: Function) {
         const { email, password } = req.body;
         try {
             const usr = await this.userService.authenticate(email, password);
-            const dto = new UserQueryDto().fromEntity(usr);
-            const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5YWUwYTk1YTM4ZTEzMGZhY2E5ZTQxNiIsImlhdCI6MTUwNDU3OTAwNSwiZXhwIjoxNTA0NTgyNjA1fQ.BJvzPokv7oe0ni9Bt-gT2OWdTAVvk3GRRmeZ5L_ZhvY";
-            res.json({ status: "ok", token: jwt, user: dto });
+            if (usr) {
+
+                res.json(this.getAuthDto(usr));
+            }
+            else {
+                throw new AuthenticationError();
+            }
         } catch (err) {
             next(new HttpExceptionBuilder(err)
                 .message("Error de autenticación")
-                .when(AuthenticationException, 403)
+                .showMessage()
+                .when(AuthenticationError, 401)
                 .build()
             );
         }

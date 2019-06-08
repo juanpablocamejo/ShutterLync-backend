@@ -1,5 +1,5 @@
 import express from "express";
-import { BaseMiddleware } from "./config/middlewares/BaseMiddleware";
+import { MiddlewareConfig } from "./config/middlewares/MiddlewareConfig";
 import DataAccess from "./config/dataAccess";
 import Environment from "./config/environment";
 import { ShutterlyncLogger } from "./config/logger";
@@ -15,7 +15,7 @@ export class ShutterlyncServer {
         this.logger = ShutterlyncLogger.instance;
         this.port = parseInt(process.env.PORT, 10) || 3000;
         this.app.set("port", this.port);
-        this.app.use(new BaseMiddleware().configuration);
+        this.app.use(new MiddlewareConfig().configuration);
         return this.app;
     };
     run = async () => {

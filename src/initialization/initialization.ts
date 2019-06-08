@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import fs from "fs";
 import { Project } from "../models/Project";
 import { PreviewItem } from "../models/PreviewItem";
@@ -10,6 +10,7 @@ import { ProjectRepository } from "../repositories/ProjectRepository";
 import { User } from "../models/User";
 import { UserRole } from "../models/enums/UserRole";
 import { Client } from "../models/Client";
+import { UserService } from "../services/UserService";
 
 const dirPath = "../backend/samples";
 const createFile = async (filename: string) => {
@@ -36,35 +37,73 @@ export const resetDB = async () => {
     await DataAccess.mongooseConnection.db.dropDatabase();
 };
 
-export const createClient = (): Client => {
-    const prefix = `cli_${+new Date()}`;
-    return new Client({
+class IdGenerator {
+    private static ids: Dictionary<number> = {};
+
+    public static get(key: string) {
+        if (!this.ids[key]) {
+            this.ids[key] = 1;
+            return 1;
+        }
+        else {
+            return ++this.ids[key];
+        }
+    }
+}
+
+export const createClient = async (password: string) => {
+    const prefix = `cli_${IdGenerator.get("client")}`;
+    const client = new Client({
         email: `${prefix}@gmail.com`,
         name: `${prefix}_name`,
         lastName: `${prefix}_lastName`,
-        location: `${prefix}_location`,
+        location: `${prefix}_location`
     });
+    await createClientUser(client, password);
+    return client;
 };
 
-export const createPhotographer = async () => {
-    const prefix = `pho_${+new Date()}`;
+export const createPhotographer = async (password?: string) => {
+    const prefix = `pho_${IdGenerator.get("photographer")}`;
     const user = new User({
         role: UserRole.STUDIO,
         email: `${prefix}@gmail.com`,
         confirmed: true,
         name: `${prefix}_name`,
         lastName: `${prefix}_lastName`,
-        location: `${prefix}_location`
+        location: `${prefix}_location`,
+        password: password || "pho123456",
     });
-    const photographer = await user.getModelForClass(User).create(user);
-    return photographer;
+
+    return await new UserService().create(user);
 };
 
-export const createTestProject = async (imgs: number = undefined) => {
-    let proj = new Project();
-    proj.title = testProjectName();
-    proj.client = createClient();
-    proj.owner = (await createPhotographer())._id;
+export const createClientUser = async (cli: Client, password: string) => {
+    const { email, name, lastName, location } = cli;
+    const user = new User({
+        role: UserRole.CLIENT,
+        email,
+        confirmed: true,
+        name,
+        lastName,
+        location,
+        password: password || "cli123456"
+    });
+    return await new UserService().create(user);
+};
+
+export const createTestProject = async (imgs: number = undefined, defaultPassword?: string) => {
+    let proj = new Project({
+        title: testProjectName(),
+        client: await createClient(defaultPassword),
+        owner: await createPhotographer(defaultPassword),
+        date: new Date(),
+        notes: "project notes",
+        quantity: 100,
+        aditionalItemPrice: 85,
+        quotation: 24000
+    });
+
     const repo = new ProjectRepository();
     try {
         proj = await repo.create(proj);

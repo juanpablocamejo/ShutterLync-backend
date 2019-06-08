@@ -1,4 +1,4 @@
-import { User } from "../../models/User";
+import { User } from "../models/User";
 import { QueryDto } from "./base/QueryDto";
 export class UserQueryDto extends QueryDto<User> {
     id: string;

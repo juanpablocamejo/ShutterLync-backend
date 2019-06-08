@@ -1,5 +1,5 @@
 import { QueryDto } from "./base/QueryDto";
-import { PreviewItem } from "../../models/PreviewItem";
+import { PreviewItem } from "../models/PreviewItem";
 import { ObjectId } from "bson";
 
 export class PreviewItemQueryDto extends QueryDto<PreviewItem> {

@@ -2,42 +2,46 @@ import { Ref, arrayProp, prop, instanceMethod } from "typegoose";
 import { PreviewItem } from "./PreviewItem";
 import { BaseObject } from "./base/BaseObject";
 import { InvalidOperationError } from "./exceptions/InvalidOperationError";
-import { ObjectId } from "mongodb";
 import { OrderItem } from "./OrderItem";
 import { OrderState } from "./enums/OrderState";
 
 export class Order extends BaseObject {
 
     @arrayProp({ items: OrderItem })
-    private _selectedItems: OrderItem[] = [];
+    orderItems: OrderItem[] = [];
 
     @prop({ enum: OrderState })
-    private state: OrderState = OrderState.PENDING;
+    state: OrderState = OrderState.PENDING;
 
-    constructor(items?: OrderItem[]) {
+    constructor(items?: OrderItem[], state?: OrderState) {
         super();
-        this._selectedItems = items || [];
+        this.orderItems = items || [];
+        this.state = state || OrderState.PENDING;
     }
 
     @prop()
     get isConfirmed(): boolean {
         return this.state == OrderState.CONFIRMED;
     }
+
     @prop()
     get isCompleted(): boolean {
         return this.state == OrderState.COMPLETED;
     }
 
-    get selectedItems(): OrderItem[] {
-        return this._selectedItems;
-    }
     @instanceMethod
     addItem(orderItem: OrderItem): void {
-        this._selectedItems.push(orderItem);
+        this.orderItems.push(orderItem);
+    }
+    @instanceMethod
+    addItems(orderItems: OrderItem[]) {
+        orderItems.forEach(itm => {
+            this.addItem(itm);
+        });
     }
     @instanceMethod
     removeItem(orderItem: OrderItem): void {
-        this._selectedItems = this._selectedItems.filter(itm => itm.previewItem != orderItem.previewItem);
+        this.orderItems = this.orderItems.filter(itm => itm.previewItem != orderItem.previewItem);
     }
     @instanceMethod
     confirm(): void {
@@ -46,7 +50,16 @@ export class Order extends BaseObject {
     }
     @instanceMethod
     complete() {
-        if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido aún no fué confirmado por el usuario.");
-        this.state = OrderState.COMPLETED;
+        switch (this.state) {
+            case OrderState.PENDING:
+                throw new InvalidOperationError("El pedido aún no fué confirmado por el usuario.");
+                break;
+            case OrderState.COMPLETED:
+                throw new InvalidOperationError("El pedido ya fué completado anteriormente.");
+                break;
+            default:
+                this.state = OrderState.COMPLETED;
+                break;
+        }
     }
 }
