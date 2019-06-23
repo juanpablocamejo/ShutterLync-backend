@@ -7,8 +7,15 @@ import { BaseController } from "./BaseController";
 import { OrderCmdDto } from "../dto/OrderCmdDto";
 import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import { UserQueryDto } from "../dto/UserQueryDto";
-import { UserRole } from "../models/enums/UserRole";
-
+import { User } from "../models/User";
+import { ProjectFilter } from "../services/ProjectFilter";
+import { PaginationOptions } from "../models/utils/PaginationOptions";
+import { pre } from "typegoose";
+import { InvalidOperationError } from "../models/exceptions/InvalidOperationError";
+export interface PaginatedResult<T> {
+    totalCount: number;
+    results: T[];
+}
 export class ProjectController extends BaseController {
     private projectService: ProjectService;
 
@@ -33,7 +40,7 @@ export class ProjectController extends BaseController {
             next(
                 new HttpExceptionBuilder(err)
                     .message("no se pudo obtener el proyecto")
-                    .showMessage()
+                    .showDetail()
                     .build()
             );
         }
@@ -47,22 +54,26 @@ export class ProjectController extends BaseController {
             next(
                 new HttpExceptionBuilder(err)
                     .message("no se pudieron guardar los cambios")
-                    .showMessage()
+                    .showDetail()
                     .build()
             );
         }
     }
+
+    prepareResult(res: any) {
+        const toProjectQueryDto = (p: Project) => new ProjectQueryDto().fromEntity(p);
+        if (res.totalCount) { return { totalCount: res.totalCount, results: res.results.map(toProjectQueryDto) }; }
+        else { return res.map(toProjectQueryDto); }
+    }
+
     async find(req: Request, res: Response, next: Function) {
-        const user: UserQueryDto = res.locals.currentUser;
-        const successHandler = (projects: Project[]) => {
-            const dtos = projects.map((p) => new ProjectQueryDto().fromEntity(p));
-            res.json(dtos);
-        };
-        let projects: Project[];
+        const user = new UserQueryDto(res.locals.currentUser).toEntity();
         try {
-            if (user.role === UserRole.CLIENT) { projects = await this.projectService.findByClient(user.email); }
-            else { projects = await this.projectService.findByOwner(user.id); }
-            successHandler(projects);
+            const { excludeItems, states } = req.query;
+            const filter = new ProjectFilter({ ...req.query, states: states && states.split(",") });
+            const pagination = req.query.page ? new PaginationOptions(req.query) : undefined;
+            const result = this.prepareResult(await this.projectService.find(user, filter, excludeItems, pagination));
+            res.json(result);
         } catch (error) {
             next(
                 new HttpExceptionBuilder(error)

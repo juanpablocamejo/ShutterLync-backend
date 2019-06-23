@@ -20,9 +20,7 @@ export class FilesController extends BaseController implements IController {
 
     initializeRoutes(): void {
         this.get("/files/:_id", this.getFileById.bind(this));
-
         const upload = multer({ dest: "uploads/" });
-
         this.router.post("/files", upload.single("file"), this.saveFile.bind(this));
     }
 

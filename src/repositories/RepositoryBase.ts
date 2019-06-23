@@ -9,21 +9,18 @@ class UpdateResult {
     nModified: number;
 }
 
-export type TypeMapper<T> = (arg: InstanceType<T>) => InstanceType<T>;
-
 export class RepositoryBase<T extends Typegoose> {
     protected dbModel: Model<InstanceType<T>>;
-    transform: TypeMapper<T> = t => t;
     constructor(dbModel: Model<InstanceType<T>>) {
         this.dbModel = dbModel;
     }
 
     async create(item: T) {
-        return this.transform(await this.dbModel.create(item));
+        return await this.dbModel.create(item);
     }
 
     async retrieve() {
-        return (await this.dbModel.find({}).exec()).map(this.transform);
+        return await this.dbModel.find({}).exec();
     }
 
     async update(_id: Types.ObjectId, item: T): Promise<UpdateResult> {
@@ -41,19 +38,22 @@ export class RepositoryBase<T extends Typegoose> {
     }
 
     async findById(_id: string) {
-        return this.transform(await this.dbModel.findById(new ObjectId(_id)).exec());
+        return await this.dbModel.findById(new ObjectId(_id)).exec();
+    }
+    protected async _find(criteria: any) {
+        return await this.dbModel.find(criteria).exec();
     }
     async find(criteria: Partial<T>) {
-        return (await this.dbModel.find(criteria).exec()).map(this.transform);
+        return await this.dbModel.find(criteria).exec();
     }
     async findLike(likeOptions: { [P in keyof T]?: string }, limit?: number, options?: Partial<T>) {
         const filter = Object.keys(likeOptions).map((k: string) => ({ [k]: new RegExp((<any>likeOptions)[k], "i") }));
         const query = this.dbModel.find({ $or: filter, ...options });
         if (limit) query.limit(limit || 8);
-        return (await query.exec()).map(this.transform);
+        return await query.exec();
     }
     async findOne(conditions?: any) {
-        return this.transform(await this.dbModel.findOne(conditions).exec());
+        return await this.dbModel.findOne(conditions).exec();
     }
     private toObjectId(_id: string): Types.ObjectId {
         return Types.ObjectId.createFromHexString(_id);

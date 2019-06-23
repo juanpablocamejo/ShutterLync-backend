@@ -82,7 +82,7 @@ export class UserController extends BaseController {
         } catch (err) {
             next(new HttpExceptionBuilder(err)
                 .message("Error de autenticación")
-                .showMessage()
+                .showDetail()
                 .when(AuthenticationError, 401)
                 .build()
             );

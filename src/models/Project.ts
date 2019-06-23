@@ -1,4 +1,4 @@
-import { prop, Ref, arrayProp, instanceMethod } from "typegoose";
+import { prop, Ref, arrayProp, instanceMethod, plugin } from "typegoose";
 import _ from "lodash";
 import { PreviewItem } from "./PreviewItem";
 import { User } from "./User";
@@ -7,6 +7,7 @@ import { OrderItem } from "./OrderItem";
 import { BaseObject } from "./base/BaseObject";
 import { Client } from "./Client";
 import { ProjectState } from "./enums/ProjectState";
+
 
 export class Project extends BaseObject {
     @prop()
@@ -87,4 +88,6 @@ export class Project extends BaseObject {
     set order(value) {
         this._order = value;
     }
+
 }
+

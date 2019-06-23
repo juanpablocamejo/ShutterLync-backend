@@ -1,6 +1,7 @@
 export enum ProjectState {
     CREATED = "created",
     PREVIEW_LOADED = "preview_loaded",
-    PENDING = "pending",
-    COMPLETED = "completed"
+    ORDER_LOADED = "order_loaded",
+    COMPLETED = "completed",
+    DELIVERED = "delivered"
 }

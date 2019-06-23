@@ -4,13 +4,14 @@ import { Project } from "../models/Project";
 import { PreviewItem } from "../models/PreviewItem";
 import { FileData } from "../models/FileData";
 import DataAccess from "../config/dataAccess";
-import { Binary } from "mongodb";
+import { Binary, ObjectId } from "mongodb";
 import mime from "mime";
 import { ProjectRepository } from "../repositories/ProjectRepository";
 import { User } from "../models/User";
 import { UserRole } from "../models/enums/UserRole";
 import { Client } from "../models/Client";
 import { UserService } from "../services/UserService";
+import { Ref } from "typegoose";
 
 const dirPath = "../backend/samples";
 const createFile = async (filename: string) => {
@@ -92,11 +93,11 @@ export const createClientUser = async (cli: Client, password: string) => {
     return await new UserService().create(user);
 };
 
-export const createTestProject = async (imgs: number = undefined, defaultPassword?: string) => {
+export const createTestProject = async (imgs: number = undefined, defaultPassword?: string, owner?: Ref<User>, client?: Client) => {
     let proj = new Project({
         title: testProjectName(),
-        client: await createClient(defaultPassword),
-        owner: await createPhotographer(defaultPassword),
+        client: client ? client : await createClient(defaultPassword),
+        owner: owner ? owner : await createPhotographer(defaultPassword),
         date: new Date(),
         notes: "project notes",
         quantity: 100,
@@ -114,6 +115,7 @@ export const createTestProject = async (imgs: number = undefined, defaultPasswor
             proj.addPreviewItem.bind(proj)(itm);
         });
         const res = await repo.update(id, proj);
+        return proj;
     } catch (error) {
         console.log(error);
     }

@@ -1,5 +1,7 @@
 import { User } from "../models/User";
 import { QueryDto } from "./base/QueryDto";
+import { ObjectId } from "bson";
+import { UserRole } from "../models/enums/UserRole";
 export class UserQueryDto extends QueryDto<User> {
     id: string;
     name: string;
@@ -15,5 +17,15 @@ export class UserQueryDto extends QueryDto<User> {
         this.location = entity.location;
         this.role = entity.role;
         return this;
+    }
+    toEntity(): User {
+        return new User({
+            _id: new ObjectId(this.id),
+            name: this.name,
+            lastName: this.lastName,
+            email: this.email,
+            location: this.location,
+            role: this.role as UserRole
+        });
     }
 }

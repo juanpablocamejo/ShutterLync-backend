@@ -33,15 +33,53 @@ describe("project API", () => {
         expect(res.status).toBe(200);
     });
 
-    it("should return the project list when request by client email", async () => {
-        const client = (await new ProjectRepository().findOne()).client;
-        const user = await new UserRepository().findLike({ email: client.email });
+    it("should return photographer projects when he request all projects", async () => {
+        const photographerId = <any>(await new ProjectRepository().findOne()).owner;
+        const phoUser = (await new UserRepository().findById(photographerId));
+        const expectedProjects = (await new ProjectRepository()
+            .find({ owner: phoUser }))
+            .map(p => new ProjectQueryDto().fromEntity(p));
         const res = await request(app)
-            .get(`/projects?clientEmail=${client.email}`)
-            .set("Authorization", `Bearer ${getUserToken(user[0])}`);
-
+            .get(`/projects`)
+            .set("Authorization", `Bearer ${getUserToken(phoUser)}`);
         expect(res.status).toBe(200);
-        expect(res.body[0].title).toBeDefined();
+        const getId = (p: ProjectQueryDto) => p.id;
+        expect(expectedProjects.length).toBe(res.body.length);
+        expectedProjects.map(getId).map(
+            (id: string) => expect(res.body.map(getId)).toContain(id)
+        );
+    });
+    it("should return client projects when he request all projects", async () => {
+        const client = <any>(await new ProjectRepository().findOne()).client;
+        const cliUser: User = (await new UserRepository().findOne({ email: client.email }));
+        const expectedProjects = (await (new Project().getModelForClass(Project)
+            .find({ "client.email": client.email })))
+            .map(p => new ProjectQueryDto().fromEntity(p));
+        const res = await request(app)
+            .get(`/projects`)
+            .set("Authorization", `Bearer ${getUserToken(cliUser)}`);
+        expect(res.status).toBe(200);
+        const getId = (p: ProjectQueryDto) => p.id;
+        expect(expectedProjects.length).toBe(res.body.length);
+        expectedProjects.map(getId).map(
+            (id: string) => expect(res.body.map(getId)).toContain(id)
+        );
+    });
+    it("should return the filtered project list when photographer request filtering by client email", async () => {
+        const anyProj = await new ProjectRepository().findOne();
+        const { client, owner } = anyProj;
+        const projects = (await new ProjectRepository().find({})).map(p => new ProjectQueryDto().fromEntity(p));
+        const clientProjects = projects.filter(p => p.client.email == client.email);
+        const phoUser = await new UserRepository().findById(<any>owner);
+        const res = await request(app)
+            .get(`/projects?client=${client.email}`)
+            .set("Authorization", `Bearer ${getUserToken(phoUser)}`);
+        expect(res.status).toBe(200);
+        const getId = (p: ProjectQueryDto) => p.id;
+        expect(clientProjects.length).toBe(res.body.length);
+        clientProjects.map(getId).map(
+            (id: string) => expect(res.body.map(getId)).toContain(id)
+        );
     });
 
 });

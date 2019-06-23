@@ -22,7 +22,6 @@ describe("BaseController", () => {
         new AnyController().config(app);
 
         const routes = getRoutes(app._router.stack);
-        console.log(routes);
         // assert
         expect(routes["/resource"]).toBeDefined();
         expect(routes["/resource"]).toContain("get");

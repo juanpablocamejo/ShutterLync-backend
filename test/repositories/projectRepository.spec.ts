@@ -1,12 +1,10 @@
 import { prepareDB } from "../util/helpers";
 import { ProjectRepository } from "../../src/repositories/ProjectRepository";
 import { PreviewItem } from "../../src/models/PreviewItem";
-import { ObjectId } from "bson";
-import ProjectService from "../../src/services/ProjectService";
 
-describe("prueba", () => {
+describe("ProjectRepository", () => {
     beforeAll(async () => { await prepareDB(); });
-    it("asdf", async () => {
+    it("addPreviewItem should persist the previewItem", async () => {
         const repo = new ProjectRepository();
         const proj = await repo.findOne();
         const item = new PreviewItem({ filename: "archivo test" });

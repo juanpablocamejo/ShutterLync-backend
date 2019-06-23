@@ -5,12 +5,13 @@ import { Project } from "../../src/models/Project";
 import { createTestProject } from "../../src/initialization/initialization";
 import { MongoMemServer } from "./mongoMemServer";
 import { BaseObject } from "../../src/models/base/BaseObject";
-import { prop } from "typegoose";
+import { prop, Ref } from "typegoose";
 import _ from "lodash";
 import { UserController } from "../../src/controllers/UserController";
 import { UserRepository } from "../../src/repositories/UserRepository";
 import { User } from "../../src/models/User";
 import { UserQueryDto } from "../../src/dto/UserQueryDto";
+import { ProjectRepository } from "../../src/repositories/ProjectRepository";
 mongoose.Promise = global.Promise;
 
 
@@ -19,8 +20,10 @@ export const validPassword = () => "0q38974gahoiugh4e0g";
 export const prepareDB = async () => {
     const mongoUri = await MongoMemServer.instance.getConnectionString();
     const conn = await DataAccess.connect(mongoUri);
-    await createTestProject(1, validPassword());
-    await createTestProject(1, validPassword());
+    const proj1 = await createTestProject(1, validPassword());
+    await createTestProject(1, validPassword(), proj1.owner, proj1.client);
+    const proj2 = await createTestProject(1, validPassword());
+    await createTestProject(1, validPassword(), proj2.owner, proj2.client);
     return conn;
 };
 

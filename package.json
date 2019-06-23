@@ -6,7 +6,7 @@
     "initialize-db": "tsc && node dist/src/initialization/index.js",
     "start": "nodemon -r ts-node/register src/index.ts",
     "build": "tsc",
-    "test": "tsc && jest --forceExit --verbose",
+    "test": " jest --silent --forceExit --verbose",
     "test:watch": "npm run test -- --watchAll",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
@@ -74,7 +74,7 @@
     "ts-node": "^5.0.1",
     "ts-node-dev": "^1.0.0-pre.39",
     "tslint": "^5.9.1",
-    "typescript": "^3.4.2"
+    "typescript": "^3.5.2"
   },
   "repository": {
     "type": "git",

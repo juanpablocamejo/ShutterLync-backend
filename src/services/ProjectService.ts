@@ -6,7 +6,10 @@ import { OrderState } from "../models/enums/OrderState";
 import { ProjectState } from "../models/enums/ProjectState";
 import { InvalidOperationError } from "../models/exceptions/InvalidOperationError";
 import { UnauthorizedOperationError } from "../models/exceptions/UnauthorizedOperationError";
-
+import { ProjectFilter } from "./ProjectFilter";
+import { User } from "../models/User";
+import { ProjectSearchStrategy } from "./ProjectSearchStrategy/ProjectSearchStrategy";
+import { PaginationOptions } from "../models/utils/PaginationOptions";
 class ProjectService {
     private projectRepository: ProjectRepository;
 
@@ -16,6 +19,11 @@ class ProjectService {
 
     async create(project: Project) {
         return await this.projectRepository.create(project);
+    }
+
+    async find(user: User, filter: ProjectFilter, excludePreviewItems: boolean = true, pagination?: PaginationOptions) {
+        const queryFilter = ProjectSearchStrategy.from(user).getQueryFilter(filter);
+        return await this.projectRepository.findByFilter(queryFilter, excludePreviewItems ? { previewItems: 0 } : undefined, pagination);
     }
 
     async findByOwner(ownerId?: string) {
@@ -28,16 +36,12 @@ class ProjectService {
         return project;
     }
 
-    async findByClient(clientEmail: string) {
-        return await this.projectRepository.findByClient(clientEmail);
-    }
-
     private async addOrderToProject(proj: Project, newOrder: Order): Promise<void> {
         proj.order = proj.order || new Order([], OrderState.PENDING);
         proj.order.addItems(newOrder.orderItems);
         if (newOrder.state === OrderState.CONFIRMED) {
             proj.order.confirm();
-            proj.state = ProjectState.PENDING;
+            proj.state = ProjectState.ORDER_LOADED;
         }
         if (newOrder.state === OrderState.COMPLETED) {
             proj.order.complete();
