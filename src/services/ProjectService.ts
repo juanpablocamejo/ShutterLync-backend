@@ -10,6 +10,7 @@ import { ProjectFilter } from "./ProjectFilter";
 import { User } from "../models/User";
 import { ProjectSearchStrategy } from "./ProjectSearchStrategy/ProjectSearchStrategy";
 import { PaginationOptions } from "../models/utils/PaginationOptions";
+
 class ProjectService {
     private projectRepository: ProjectRepository;
 
@@ -36,9 +37,8 @@ class ProjectService {
         return project;
     }
 
-    private async addOrderToProject(proj: Project, newOrder: Order): Promise<void> {
-        proj.order = proj.order || new Order([], OrderState.PENDING);
-        proj.order.addItems(newOrder.orderItems);
+    private async updateProjectOrder(proj: Project, newOrder: Order): Promise<void> {
+        proj.order = newOrder;
         if (newOrder.state === OrderState.CONFIRMED) {
             proj.order.confirm();
             proj.state = ProjectState.ORDER_LOADED;
@@ -54,7 +54,7 @@ class ProjectService {
         if (newOrder.state != OrderState.COMPLETED && proj.state != ProjectState.PREVIEW_LOADED) {
             throw new InvalidOperationError("No se puede cargar un pedido hasta que el fotografo confirme la muestra.");
         }
-        await this.addOrderToProject(proj, newOrder);
+        await this.updateProjectOrder(proj, newOrder);
         return await this.projectRepository.update(new ObjectId(projectId), proj);
     }
 

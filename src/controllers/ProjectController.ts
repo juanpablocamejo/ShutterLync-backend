@@ -7,11 +7,8 @@ import { BaseController } from "./BaseController";
 import { OrderCmdDto } from "../dto/OrderCmdDto";
 import { HttpExceptionBuilder } from "../exceptions/HttpExceptionBuilder";
 import { UserQueryDto } from "../dto/UserQueryDto";
-import { User } from "../models/User";
 import { ProjectFilter } from "../services/ProjectFilter";
 import { PaginationOptions } from "../models/utils/PaginationOptions";
-import { pre } from "typegoose";
-import { InvalidOperationError } from "../models/exceptions/InvalidOperationError";
 export interface PaginatedResult<T> {
     totalCount: number;
     results: T[];
