@@ -6,7 +6,8 @@ export class PaginationOptions extends BaseObject {
     pageSize: number;
 
     constructor(fields?: Partial<PaginationOptions>) {
-        super({ ...fields, page: +fields.page, pageSize: +fields.pageSize } as Partial<PaginationOptions>);
+        super();
+        this.init({ ...fields, page: +fields.page, pageSize: +fields.pageSize } as Partial<PaginationOptions>);
     }
 
     get offset() {
