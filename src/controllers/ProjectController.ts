@@ -26,7 +26,7 @@ export class ProjectController extends BaseController {
         this.get("/projects/:projectId", this.findById.bind(this));
         this.post("/projects", this.create.bind(this), ProjectCmdDto);
         this.patch("/projects/:projectId", this.update.bind(this));
-        this.post("/projects/:projectId/orders", this.saveOrder.bind(this), OrderCmdDto);
+        this.put("/projects/:projectId/orders", this.saveOrder.bind(this), OrderCmdDto);
     }
 
     async findById(req: Request, res: Response, next: Function) {
@@ -36,7 +36,7 @@ export class ProjectController extends BaseController {
         } catch (err) {
             next(
                 new HttpExceptionBuilder(err)
-                    .message("no se pudo obtener el proyecto")
+                    .message("No se pudo obtener el proyecto")
                     .showDetail()
                     .build()
             );
@@ -45,12 +45,12 @@ export class ProjectController extends BaseController {
     async update(req: Request, res: Response, next: Function) {
         const user: UserQueryDto = res.locals.currentUser;
         try {
-            await this.projectService.confirmPreview(req.params.projectId, user.id);
+            await this.projectService.confirmPreview(req.params.projectId, user);
             res.status(200).end();
         } catch (err) {
             next(
                 new HttpExceptionBuilder(err)
-                    .message("no se pudieron guardar los cambios")
+                    .message("No se pudieron guardar los cambios")
                     .showDetail()
                     .build()
             );
@@ -74,7 +74,7 @@ export class ProjectController extends BaseController {
         } catch (error) {
             next(
                 new HttpExceptionBuilder(error)
-                    .message("no se pudo obtener los proyectos")
+                    .message("No se pudo obtener los proyectos")
                     .build()
             );
         }
@@ -91,7 +91,7 @@ export class ProjectController extends BaseController {
         catch (error) {
             next(
                 new HttpExceptionBuilder(error)
-                    .message("no se pudo crear el proyecto")
+                    .message("No se pudo crear el proyecto")
                     .build()
             );
         }
@@ -105,7 +105,7 @@ export class ProjectController extends BaseController {
         } catch (error) {
             next(
                 new HttpExceptionBuilder(error)
-                    .message("no se pudo cargar el pedido")
+                    .message("No se pudo cargar el pedido")
                     .build()
             );
         }

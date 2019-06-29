@@ -12,6 +12,6 @@ export class Client extends BaseObject {
     location: string;
 
     constructor(fields?: Partial<Client>) {
-        super(fields);
+        super(); this.init(fields);
     }
 }

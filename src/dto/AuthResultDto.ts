@@ -6,7 +6,8 @@ export class AuthResultDto extends BaseObject {
     status: AuthResultStatus;
     token: string;
     user: UserQueryDto;
+
     constructor(fields?: Partial<AuthResultDto>) {
-        super(fields);
+        super(); this.init(fields);
     }
 }

@@ -9,6 +9,6 @@ export class PreviewItem extends BaseObject {
     fileData: Ref<FileData>;
 
     constructor(fields?: Partial<PreviewItem>) {
-        super(fields);
+        super(); this.init(fields);
     }
 }

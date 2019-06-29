@@ -19,7 +19,7 @@ export class User extends BaseObject {
     confirmed: boolean;
 
     constructor(fields?: Partial<User>) {
-        super(fields);
+        super(); this.init(fields);
     }
 }
 

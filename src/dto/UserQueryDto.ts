@@ -3,6 +3,9 @@ import { QueryDto } from "./base/QueryDto";
 import { ObjectId } from "bson";
 import { UserRole } from "../models/enums/UserRole";
 export class UserQueryDto extends QueryDto<User> {
+    constructor(fields?: Partial<UserQueryDto>) {
+        super(); this.init(fields);
+    }
     id: string;
     name: string;
     lastName: string;

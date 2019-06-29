@@ -9,20 +9,20 @@ export abstract class BaseObject extends Typegoose implements IEquatable {
     @prop({ required: true, default: Date.now })
     createdAt: Date;
 
-
     protected constructor(fields?: Partial<BaseObject>) {
         super();
-        this.init(fields);
     }
 
-    private init<T>(fields?: Partial<T>): void {
-        if (fields) Object.assign(this, fields);
+    protected init<T>(fields?: Partial<T>): void {
+        Object.assign(this, fields);
     }
 
+    @instanceMethod
     eql(obj: BaseObject): boolean {
         return this._id.equals(obj._id);
     }
 
+    @instanceMethod
     equals(obj: BaseObject): boolean {
         return _.isEqual(this, obj);
     }

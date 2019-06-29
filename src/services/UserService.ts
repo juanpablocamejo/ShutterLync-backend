@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/UserRepository";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
-import { PasswordTooShortError } from "../models/exceptions/PasswordToShortError";
+import { PasswordTooShortError } from "../models/exceptions/PasswordTooShortError";
 import { UserRole } from "../models/enums/UserRole";
 
 const SALT_WORK_FACTOR = 10;

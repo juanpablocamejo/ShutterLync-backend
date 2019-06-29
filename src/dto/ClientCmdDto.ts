@@ -5,6 +5,11 @@ export class ClientCmdDto extends CommandDto<Client> {
     lastName: string;
     email: string;
     location: string;
+
+    constructor(fields?: Partial<ClientCmdDto>) {
+        super(); this.init(fields);
+    }
+
     toEntity(): Client {
         return new Client({ ...this } as any);
     }

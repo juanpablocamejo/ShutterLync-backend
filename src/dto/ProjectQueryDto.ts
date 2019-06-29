@@ -20,7 +20,7 @@ export class ProjectQueryDto extends QueryDto<Project> {
     quantity: number;
 
     constructor(fields?: Partial<ProjectQueryDto>) {
-        super(fields);
+        super(); this.init(fields);
     }
 
     fromEntity(entity: Project): ProjectQueryDto {

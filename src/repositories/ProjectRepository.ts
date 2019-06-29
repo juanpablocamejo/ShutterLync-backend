@@ -15,6 +15,12 @@ export class ProjectRepository extends RepositoryBase<Project> {
         proj = await proj.save();
         return proj.lastPreviewItem();
     }
+    async removePreviewItem(projectId: string, previewItem: PreviewItem) {
+        let proj = await this.dbModel.findById(projectId);
+        proj.removePreviewItem(previewItem);
+        proj = await proj.save();
+        return proj.lastPreviewItem();
+    }
 
     async findPaginated(filter: any, projection: any = {}, pagination?: PaginationOptions) {
         const { offset, pageSize, sortDirection, sortField } = pagination;

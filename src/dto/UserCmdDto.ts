@@ -5,6 +5,10 @@ import { IsString, Length, IsEmail, IsOptional, MaxLength, IsEnum } from "class-
 
 
 export class UserCmdDto extends CommandDto<User> {
+
+    constructor(fields?: Partial<UserCmdDto>) {
+        super(); this.init(fields);
+    }
     @IsString() @Length(2, 200) name: string;
     @IsString() @Length(2, 200) lastName: string;
     @IsEmail() email: string;

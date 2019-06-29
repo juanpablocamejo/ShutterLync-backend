@@ -17,7 +17,7 @@ export class Auth implements IMiddlewareClass {
                 if (!token) throw new HttpInvalidAuthHeader();
                 else {
                     try {
-                        const secret = environment.get(ConfigKey.JWT_SECRET);
+                        const secret = environment.get(ConfigKey.JWT_SECRET)!;
                         res.locals.currentUser = jwt.verify(token, secret);
                     } catch {
                         throw new UnauthorizedRequest();
@@ -38,7 +38,7 @@ export class Auth implements IMiddlewareClass {
     private getTokenFromHeaders(headers: IncomingHttpHeaders) {
         const { authorization } = headers;
         const validHeader = authorization && authorization.split(" ")[0] === "Bearer";
-        return validHeader ? authorization.split(" ")[1] : undefined;
+        return validHeader ? authorization!.split(" ")[1] : undefined;
     }
 
 

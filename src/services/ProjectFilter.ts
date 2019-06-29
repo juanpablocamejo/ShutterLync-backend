@@ -11,7 +11,7 @@ export class ProjectFilter extends BaseObject {
     title: string;
 
     constructor(fields?: Partial<ProjectFilter>) {
-        super(fields);
+        super(); this.init(fields);
     }
 
     private filtersConfig(): any[] {

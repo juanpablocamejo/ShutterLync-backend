@@ -38,7 +38,7 @@ export class UserController extends BaseController {
         } catch (error) {
             next(
                 new HttpExceptionBuilder(error)
-                    .message("no se pudo realizar la búsqueda")
+                    .message("No se pudo realizar la búsqueda")
                     .build()
             );
         }
@@ -52,7 +52,7 @@ export class UserController extends BaseController {
         } catch (err) {
             next(
                 new HttpExceptionBuilder(err)
-                    .message("no se pudo crear el usuario")
+                    .message("No se pudo crear el usuario")
                     .when(DuplicatedUserError, 409)
                     .build()
             );

@@ -1,9 +1,12 @@
 
 export abstract class QueryDto<T> {
 
-    constructor(fields?: Partial<QueryDto<T>>) {
-        Object.assign(this, fields);
+    protected constructor(fields?: Partial<QueryDto<T>>) {
+
     }
 
+    init<T>(fields?: Partial<T>) {
+        Object.assign(this, fields);
+    }
     abstract fromEntity(entity: T): QueryDto<T>;
 }

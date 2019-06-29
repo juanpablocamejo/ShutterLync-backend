@@ -46,8 +46,12 @@ export class AnyModelClass extends BaseObject {
     anyProp: any;
     @prop()
     anotherProp: any;
+    arrayProp: any[];
+    objProp: AnyModelClass;
+    propWithDefValue1: any = 1;
     constructor(fields?: Partial<AnyModelClass>) {
         super(fields);
+        this.init(fields);
     }
 }
 

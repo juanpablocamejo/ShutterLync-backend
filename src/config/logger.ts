@@ -1,7 +1,7 @@
 import { Logger, transports } from "winston";
 
 export class ShutterlyncLogger extends Logger {
-    private static _instance: ShutterlyncLogger = undefined;
+    private static _instance?: ShutterlyncLogger = undefined;
     private constructor() {
         super();
     }

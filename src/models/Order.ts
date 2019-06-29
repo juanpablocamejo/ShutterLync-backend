@@ -34,7 +34,8 @@ export class Order extends BaseObject {
         this.orderItems.push(orderItem);
     }
     @instanceMethod
-    addItems(orderItems: OrderItem[]) {
+    addItems(orderItems: OrderItem[], clear: boolean = false) {
+        if (clear) this.removeItems();
         orderItems.forEach(itm => {
             this.addItem(itm);
         });
@@ -44,22 +45,22 @@ export class Order extends BaseObject {
         this.orderItems = this.orderItems.filter(itm => itm.previewItem != orderItem.previewItem);
     }
     @instanceMethod
+    removeItems(): void {
+        this.orderItems = [];
+    }
+    @instanceMethod
     confirm(): void {
-        if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido ya fué confirmado anteriormente.");
+        if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido debe estar PENDIENTE para ser confirmado");
         this.state = OrderState.CONFIRMED;
     }
     @instanceMethod
     complete() {
-        switch (this.state) {
-            case OrderState.PENDING:
-                throw new InvalidOperationError("El pedido aún no fué confirmado por el usuario.");
-                break;
-            case OrderState.COMPLETED:
-                throw new InvalidOperationError("El pedido ya fué completado anteriormente.");
-                break;
-            default:
-                this.state = OrderState.COMPLETED;
-                break;
-        }
+        if (this.state != OrderState.CONFIRMED) throw new InvalidOperationError("El pedido debe estar CONFIRMADO para ser completado.");
+        this.state = OrderState.COMPLETED;
+    }
+    @instanceMethod
+    markAsDelivered(): void {
+        if (this.state != OrderState.COMPLETED) throw new InvalidOperationError("El pedido debe estar COMPLETADO para ser entregado.");
+        this.state = OrderState.DELIVERED;
     }
 }

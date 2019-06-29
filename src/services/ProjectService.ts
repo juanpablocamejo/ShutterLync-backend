@@ -1,15 +1,14 @@
 import { ProjectRepository } from "../repositories/ProjectRepository";
-import { ObjectId, ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 import { Order } from "../models/Order";
 import { Project } from "../models/Project";
-import { OrderState } from "../models/enums/OrderState";
 import { ProjectState } from "../models/enums/ProjectState";
-import { InvalidOperationError } from "../models/exceptions/InvalidOperationError";
 import { UnauthorizedOperationError } from "../models/exceptions/UnauthorizedOperationError";
 import { ProjectFilter } from "./ProjectFilter";
 import { User } from "../models/User";
 import { ProjectSearchStrategy } from "./ProjectSearchStrategy/ProjectSearchStrategy";
 import { PaginationOptions } from "../models/utils/PaginationOptions";
+import { UserQueryDto } from "../dto/UserQueryDto";
 
 class ProjectService {
     private projectRepository: ProjectRepository;
@@ -37,30 +36,15 @@ class ProjectService {
         return project;
     }
 
-    private async updateProjectOrder(proj: Project, newOrder: Order): Promise<void> {
-        proj.order = newOrder;
-        if (newOrder.state === OrderState.CONFIRMED) {
-            proj.order.confirm();
-            proj.state = ProjectState.ORDER_LOADED;
-        }
-        if (newOrder.state === OrderState.COMPLETED) {
-            proj.order.complete();
-            proj.state = ProjectState.COMPLETED;
-        }
-    }
-
     async saveOrder(projectId: string, newOrder: Order) {
         const proj = await this.projectRepository.findById(projectId);
-        if (newOrder.state != OrderState.COMPLETED && proj.state != ProjectState.PREVIEW_LOADED) {
-            throw new InvalidOperationError("No se puede cargar un pedido hasta que el fotografo confirme la muestra.");
-        }
-        await this.updateProjectOrder(proj, newOrder);
+        proj.updateOrder(newOrder);
         return await this.projectRepository.update(new ObjectId(projectId), proj);
     }
 
-    async confirmPreview(projectId: string, userId: string) {
+    async confirmPreview(projectId: string, user: UserQueryDto) {
         const proj = await this.projectRepository.findById(projectId);
-        if ((<any>proj.owner).toHexString() !== userId) throw new UnauthorizedOperationError("Debe ser el creador del proyecto para confirmar la muestra.");
+        if ((<any>proj.owner).toHexString() !== user.id) throw new UnauthorizedOperationError("Debe ser el creador del proyecto para confirmar la muestra.");
         proj.state = ProjectState.PREVIEW_LOADED;
         return await this.projectRepository.update(new ObjectId(projectId), proj);
     }

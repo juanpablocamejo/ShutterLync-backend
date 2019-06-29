@@ -18,7 +18,7 @@ class EnvironmentConfig {
     static get uploadsDir() {
         return process.env.UPLOADS_DIR;
     }
-    static get mongoDBUri(): string {
+    static get mongoDBUri() {
         return (this.environment === "production") ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
     }
 

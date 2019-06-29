@@ -9,6 +9,7 @@ export class FileData extends BaseObject {
     contentype: string;
 
     constructor(fields?: Partial<FileData>) {
-        super(fields);
+        super(); this.init(fields);
+
     }
 }

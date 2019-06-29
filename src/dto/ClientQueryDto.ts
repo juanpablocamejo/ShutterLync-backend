@@ -8,7 +8,7 @@ export class ClientQueryDto extends QueryDto<Client> {
     location: string;
 
     constructor(fields?: Partial<ClientQueryDto>) {
-        super(fields);
+        super(); this.init(fields);
     }
 
     fromEntity(entity: Client): ClientQueryDto {

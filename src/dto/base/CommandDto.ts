@@ -1,5 +1,6 @@
 export abstract class CommandDto<T> {
-    constructor(fields?: Partial<T>) {
+    protected constructor(fields?: Partial<T>) { }
+    init<T>(fields?: Partial<T>) {
         Object.assign(this, fields);
     }
     abstract toEntity(): T;

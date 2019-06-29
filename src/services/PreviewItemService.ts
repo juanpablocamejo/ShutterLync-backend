@@ -23,4 +23,11 @@ export class PreviewItemService {
         item.fileData = fData._id;
         return await this.projectRepository.addPreviewItem(projectId, item);
     }
+
+    async delete(projectId: string, itemId: string) {
+        const proj = await this.projectRepository.findById(projectId);
+        const item = proj.previewItems.find(itm => itm._id.toHexString() == itemId);
+        await this.fileDataRepository.delete((item.fileData as any).toHexString());
+        await this.projectRepository.removePreviewItem(projectId, item);
+    }
 }
