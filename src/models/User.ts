@@ -1,4 +1,4 @@
-import { Typegoose, prop, arrayProp } from "typegoose";
+import { Typegoose, prop, arrayProp, instanceMethod } from "typegoose";
 import { BaseObject } from "./base/BaseObject";
 import { UserRole } from "./enums/UserRole";
 
@@ -14,12 +14,19 @@ export class User extends BaseObject {
     @prop()
     password: string;
     @prop({ enum: UserRole })
-    role: UserRole;
+    role: UserRole = UserRole.CLIENT;
     @prop({ required: true })
-    confirmed: boolean;
+    confirmed: boolean = false;
 
     constructor(fields?: Partial<User>) {
         super(); this.init(fields);
+        this.password = this.password || "sl*123456";
+    }
+
+    @instanceMethod
+    confirm(newPassword: string) {
+        this.confirmed = true;
+        this.password = newPassword;
     }
 }
 

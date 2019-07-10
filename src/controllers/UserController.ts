@@ -24,6 +24,7 @@ export class UserController extends BaseController {
 
     initializeRoutes(): void {
         this.post("/auth", this.authenticate.bind(this));
+        this.post("/confirmUser", this.confirmUser.bind(this));
         this.get("/users", this.find.bind(this));
         this.post("/users", this.createUser.bind(this), UserCmdDto);
     }
@@ -64,10 +65,31 @@ export class UserController extends BaseController {
         const secret = env.get(ConfigKey.JWT_SECRET);
         return new AuthResultDto({
             status: AuthResultStatus.OK,
-            token: jwt.sign({ ...usrDto }, secret),
+            token: usr.confirmed ? jwt.sign({ ...usrDto }, secret) : undefined,
             user: usrDto
         });
     }
+
+    async confirmUser(req: Request, res: Response, next: Function) {
+        const { email, newPassword, password } = req.body;
+        try {
+            const usr = await this.userService.confirmUser(email, password, newPassword);
+            if (usr) {
+                res.json(this.getAuthDto(usr));
+            }
+            else {
+                throw new AuthenticationError();
+            }
+        } catch (err) {
+            next(new HttpExceptionBuilder(err)
+                .message("Error de autenticación")
+                .showDetail()
+                .when(AuthenticationError, 401)
+                .build()
+            );
+        }
+    }
+
     async authenticate(req: Request, res: Response, next: Function) {
         const { email, password } = req.body;
         try {

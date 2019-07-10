@@ -4,7 +4,7 @@ import { PreviewItem } from "../models/PreviewItem";
 
 export class FileDataRepository extends RepositoryBase<FileData> {
     constructor() {
-        super(new FileData().getModelForClass(FileData));
+        super(FileData);
     }
 
 

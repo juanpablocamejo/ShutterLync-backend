@@ -6,7 +6,7 @@ import { ProjectFilter } from "../services/ProjectFilter";
 
 export class ProjectRepository extends RepositoryBase<Project> {
     constructor() {
-        super(new Project().getModelForClass(Project));
+        super(Project);
     }
 
     async addPreviewItem(projectId: string, previewItem: PreviewItem) {

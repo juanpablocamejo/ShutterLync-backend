@@ -5,8 +5,7 @@ import { DuplicatedUserError } from "../models/exceptions/DuplicatedUserError";
 
 export class UserRepository extends RepositoryBase<User> {
     constructor() {
-        const obj = new User().getModelForClass(User);
-        super(obj);
+        super(User);
     }
 
     async create(user: User) {

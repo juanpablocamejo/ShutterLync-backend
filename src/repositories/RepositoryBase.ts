@@ -11,8 +11,8 @@ class UpdateResult {
 
 export class RepositoryBase<T extends Typegoose> {
     protected dbModel: Model<InstanceType<T>>;
-    constructor(dbModel: Model<InstanceType<T>>) {
-        this.dbModel = dbModel;
+    constructor(modelType: new () => T) {
+        this.dbModel = new modelType().getModelForClass(modelType);
     }
 
     async create(item: T) {
@@ -23,7 +23,7 @@ export class RepositoryBase<T extends Typegoose> {
         return await this.dbModel.find({}).exec();
     }
 
-    async update(_id: Types.ObjectId, item: T): Promise<UpdateResult> {
+    async update(_id: Types.ObjectId, item: Partial<T>): Promise<UpdateResult> {
         try {
             return await this.dbModel.update({ _id }, item).exec();
 

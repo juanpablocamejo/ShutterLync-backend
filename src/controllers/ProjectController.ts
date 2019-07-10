@@ -59,7 +59,7 @@ export class ProjectController extends BaseController {
 
     prepareResult(res: any) {
         const toProjectQueryDto = (p: Project) => new ProjectQueryDto().fromEntity(p);
-        if (res.totalCount) { return { totalCount: res.totalCount, results: res.results.map(toProjectQueryDto) }; }
+        if (res.totalCount !== undefined) { return { totalCount: res.totalCount, results: res.results.map(toProjectQueryDto) }; }
         else { return res.map(toProjectQueryDto); }
     }
 

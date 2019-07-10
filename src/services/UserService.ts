@@ -42,6 +42,18 @@ export class UserService {
         return await this.userRepository.create(user);
     }
 
+    async confirmUser(email: string, oldPassword: string, password: string) {
+        const user: User = await this.userRepository.findOne({ email });
+        if (user && (await this.verifyPassword(user, oldPassword))) {
+            user.confirm(await this.hashPassword(password));
+            await this.userRepository.update(user._id, user);
+            return this.authenticate(email, password);
+        }
+        else {
+            return undefined;
+        }
+    }
+
     async authenticate(email: string, password: string): Promise<User> {
         const user: User = await this.userRepository.findOne({ email });
         if (!user || !(await this.verifyPassword(user, password))) {

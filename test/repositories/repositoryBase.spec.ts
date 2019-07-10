@@ -4,7 +4,7 @@ import { RepositoryBase } from "../../src/repositories/RepositoryBase";
 
 describe("RepositoryBase", () => {
     const anyModelObj = () => new AnyModelClass({ anyProp: 2 });
-    const anyRepo = () => new RepositoryBase<AnyModelClass>(new AnyModelClass().getModelForClass(AnyModelClass));
+    const anyRepo = () => new RepositoryBase<AnyModelClass>(AnyModelClass);
 
     beforeAll(prepareDB);
 

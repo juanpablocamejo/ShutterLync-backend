@@ -1,32 +1,31 @@
-import { Ref, arrayProp, prop, instanceMethod } from "typegoose";
-import { PreviewItem } from "./PreviewItem";
+import { arrayProp, prop, instanceMethod } from "typegoose";
 import { BaseObject } from "./base/BaseObject";
 import { InvalidOperationError } from "./exceptions/InvalidOperationError";
 import { OrderItem } from "./OrderItem";
-import { OrderState } from "./enums/OrderState";
+import { OrderStates } from "./enums/OrderState";
 
 export class Order extends BaseObject {
 
     @arrayProp({ items: OrderItem })
     orderItems: OrderItem[] = [];
 
-    @prop({ enum: OrderState })
-    state: OrderState = OrderState.PENDING;
+    @prop({ enum: OrderStates })
+    state: OrderStates = OrderStates.PENDING;
 
-    constructor(items?: OrderItem[], state?: OrderState) {
+    constructor(items?: OrderItem[], state?: OrderStates) {
         super();
         this.orderItems = items || [];
-        this.state = state || OrderState.PENDING;
+        this.state = state || OrderStates.PENDING;
     }
 
     @prop()
     get isConfirmed(): boolean {
-        return this.state == OrderState.CONFIRMED;
+        return this.state == OrderStates.CONFIRMED;
     }
 
     @prop()
     get isCompleted(): boolean {
-        return this.state == OrderState.COMPLETED;
+        return this.state == OrderStates.COMPLETED;
     }
 
     @instanceMethod
@@ -50,17 +49,17 @@ export class Order extends BaseObject {
     }
     @instanceMethod
     confirm(): void {
-        if (this.state != OrderState.PENDING) throw new InvalidOperationError("El pedido debe estar PENDIENTE para ser confirmado");
-        this.state = OrderState.CONFIRMED;
+        if (this.state != OrderStates.PENDING) throw new InvalidOperationError("El pedido debe estar PENDIENTE para ser confirmado");
+        this.state = OrderStates.CONFIRMED;
     }
     @instanceMethod
     complete() {
-        if (this.state != OrderState.CONFIRMED) throw new InvalidOperationError("El pedido debe estar CONFIRMADO para ser completado.");
-        this.state = OrderState.COMPLETED;
+        if (this.state != OrderStates.CONFIRMED) throw new InvalidOperationError("El pedido debe estar CONFIRMADO para ser completado.");
+        this.state = OrderStates.COMPLETED;
     }
     @instanceMethod
     markAsDelivered(): void {
-        if (this.state != OrderState.COMPLETED) throw new InvalidOperationError("El pedido debe estar COMPLETADO para ser entregado.");
-        this.state = OrderState.DELIVERED;
+        if (this.state != OrderStates.COMPLETED) throw new InvalidOperationError("El pedido debe estar COMPLETADO para ser entregado.");
+        this.state = OrderStates.DELIVERED;
     }
 }

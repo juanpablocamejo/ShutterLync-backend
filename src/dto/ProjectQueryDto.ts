@@ -3,12 +3,12 @@ import { QueryDto } from "./base/QueryDto";
 import { PreviewItemQueryDto } from "./PreviewItemQueryDto";
 import { OrderQueryDto } from "./OrderQueryDto";
 import { ClientQueryDto } from "./ClientQueryDto";
-import { ProjectState } from "../models/enums/ProjectState";
+import { ProjectStates } from "../models/enums/ProjectState";
 
 export class ProjectQueryDto extends QueryDto<Project> {
     id: string;
     title: string;
-    state: ProjectState;
+    state: ProjectStates;
     date: Date;
     notes: string;
     location: string;

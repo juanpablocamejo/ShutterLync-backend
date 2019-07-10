@@ -1,12 +1,12 @@
 import { Order } from "../models/Order";
 import { QueryDto } from "./base/QueryDto";
-import { OrderState } from "../models/enums/OrderState";
+import { OrderStates } from "../models/enums/OrderState";
 import { OrderItem } from "../models/OrderItem";
-import { ObjectId } from "mongodb";
 import { OrderItemQueryDto } from "./OrderItemQueryDto";
+
 export class OrderQueryDto extends QueryDto<Order> {
     orderItems: OrderItemQueryDto[] = [];
-    state: OrderState;
+    state: OrderStates;
 
     constructor(fields?: Partial<OrderQueryDto>) {
         super(); this.init(fields);
@@ -18,5 +18,4 @@ export class OrderQueryDto extends QueryDto<Order> {
         return this;
     }
 }
-
 

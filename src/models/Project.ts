@@ -1,4 +1,4 @@
-import { prop, Ref, arrayProp, instanceMethod, plugin } from "typegoose";
+import { prop, Ref, arrayProp, instanceMethod } from "typegoose";
 import _ from "lodash";
 import { PreviewItem } from "./PreviewItem";
 import { User } from "./User";
@@ -6,8 +6,8 @@ import { Order } from "./Order";
 import { OrderItem } from "./OrderItem";
 import { BaseObject } from "./base/BaseObject";
 import { Client } from "./Client";
-import { ProjectState } from "./enums/ProjectState";
-import { OrderState } from "./enums/OrderState";
+import { ProjectStates } from "./enums/ProjectState";
+import { OrderStates } from "./enums/OrderState";
 
 
 export class Project extends BaseObject {
@@ -21,7 +21,7 @@ export class Project extends BaseObject {
     public title: string;
 
     @prop({ required: true })
-    public state: ProjectState = ProjectState.CREATED;
+    public state: ProjectStates = ProjectStates.CREATED;
 
     @prop()
     public date: Date;
@@ -62,9 +62,9 @@ export class Project extends BaseObject {
     @instanceMethod
     private orderStateActions(): { [orderState: string]: () => void } {
         return {
-            [OrderState.COMPLETED]: this.completeOrder.bind(this),
-            [OrderState.CONFIRMED]: this.confirmOrder.bind(this),
-            [OrderState.DELIVERED]: this.markAsDelivered.bind(this)
+            [OrderStates.COMPLETED]: this.completeOrder.bind(this),
+            [OrderStates.CONFIRMED]: this.confirmOrder.bind(this),
+            [OrderStates.DELIVERED]: this.markAsDelivered.bind(this)
         };
     }
 
@@ -97,21 +97,21 @@ export class Project extends BaseObject {
     @instanceMethod
     public confirmOrder() {
         this._order.confirm();
-        this.state = ProjectState.ORDER_LOADED;
+        this.state = ProjectStates.ORDER_LOADED;
     }
 
     @instanceMethod
     public completeOrder() {
         this._order.complete();
-        this.state = ProjectState.COMPLETED;
+        this.state = ProjectStates.COMPLETED;
     }
     @instanceMethod
     public markAsDelivered() {
         this._order.markAsDelivered();
-        this.state = ProjectState.DELIVERED;
+        this.state = ProjectStates.DELIVERED;
     }
     @instanceMethod
-    public applyOrderAction(state: OrderState) {
+    public applyOrderAction(state: OrderStates) {
         this.orderStateActions()[state]();
     }
     @instanceMethod

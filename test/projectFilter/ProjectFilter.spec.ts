@@ -1,6 +1,6 @@
 import { ProjectFilter } from "../../src/services/ProjectFilter";
 import { ObjectId } from "bson";
-import { ProjectState } from "../../src/models/enums/ProjectState";
+import { ProjectStates } from "../../src/models/enums/ProjectState";
 
 describe("ProjectFilter", () => {
     it("client should map to regex on client.email field", async () => {
@@ -54,7 +54,7 @@ describe("ProjectFilter", () => {
             .toEqual(filter.ownerId);
     });
     it("states should map to $in operator filter on state field", async () => {
-        const anyState = ProjectState.CREATED;
+        const anyState = ProjectStates.CREATED;
         // arrange
         const filter = new ProjectFilter({ states: [anyState] });
         // act

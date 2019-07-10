@@ -7,7 +7,7 @@ const logger = ShutterlyncLogger.instance;
 class EnvironmentConfig {
 
     static get openUrls(): string[] {
-        return ["/auth"];
+        return ["/auth", "/confirmUser"];
     }
     static get(key: ConfigKey) {
         return process.env[key];

@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Order } from "../../src/models/Order";
 import { OrderItem } from "../../src/models/OrderItem";
-import { OrderState } from "../../src/models/enums/OrderState";
+import { OrderStates } from "../../src/models/enums/OrderState";
 import { InvalidOperationError } from "../../src/models/exceptions/InvalidOperationError";
 const anyPreviewItemId = new ObjectId("5cad09ca67c5dd378c2850dc");
 
@@ -10,7 +10,7 @@ describe("Order", () => {
         // arrange & act
         const obj = new Order();
         // assert
-        expect(obj.state).toBe(OrderState.PENDING);
+        expect(obj.state).toBe(OrderStates.PENDING);
     });
     it("addItem should add an item to order", () => {
         // arrange
@@ -41,7 +41,7 @@ describe("Order", () => {
 
     it("confirm should throw an exception if order is already confirmed", () => {
         // arrange
-        const obj = new Order([], OrderState.CONFIRMED);
+        const obj = new Order([], OrderStates.CONFIRMED);
         // act & assert
         expect(() => obj.confirm()).toThrowError(InvalidOperationError);
 
@@ -55,7 +55,7 @@ describe("Order", () => {
     });
     it("complete should throw an exception if order is already completed", () => {
         // arrange
-        const obj = new Order([], OrderState.COMPLETED);
+        const obj = new Order([], OrderStates.COMPLETED);
         // act & assert
         expect(() => obj.complete()).toThrowError(InvalidOperationError);
 
@@ -71,7 +71,7 @@ describe("Order", () => {
     });
     it("complete should change the order state to COMPLETED", () => {
         // arrange
-        const obj = new Order([], OrderState.CONFIRMED);
+        const obj = new Order([], OrderStates.CONFIRMED);
         // act
         obj.complete();
         // assert

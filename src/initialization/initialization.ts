@@ -10,8 +10,12 @@ import { ProjectRepository } from "../repositories/ProjectRepository";
 import { User } from "../models/User";
 import { UserRole } from "../models/enums/UserRole";
 import { Client } from "../models/Client";
+import { ProjectState } from "../models/ProjectState";
 import { UserService } from "../services/UserService";
 import { Ref } from "typegoose";
+import { ProjectStateRepository } from "../repositories/ProjectStateRepository";
+import { OrderStateRepository } from "../repositories/OrderStateRepository";
+import { OrderState } from "../models/OrderState";
 
 const dirPath = "../backend/samples";
 const createFile = async (filename: string) => {
@@ -73,7 +77,7 @@ export const createPhotographer = async (password?: string) => {
         name: `${prefix}_name`,
         lastName: `${prefix}_lastName`,
         location: `${prefix}_location`,
-        password: password || "pho123456",
+        password: password || "123456",
     });
 
     return await new UserService().create(user);
@@ -88,7 +92,7 @@ export const createClientUser = async (cli: Client, password: string) => {
         name,
         lastName,
         location,
-        password: password || "cli123456"
+        password: password || "123456"
     });
     return await new UserService().create(user);
 };
@@ -121,4 +125,25 @@ export const createTestProject = async (imgs: number = undefined, defaultPasswor
     }
 };
 
+export const createProjectStates = async () => {
+    const repo = new ProjectStateRepository();
+    const states: ProjectState[] = [
+        new ProjectState({ oid: 1, name: "created", studioLabel: "Creado", clientLabel: "Estamos preparando la muestra" }),
+        new ProjectState({ oid: 2, name: "preview_loaded", studioLabel: "Muestra cargada", clientLabel: "Ya puede cargar su pedido" }),
+        new ProjectState({ oid: 3, name: "order_loaded", studioLabel: "Pedido cargado", clientLabel: "Estamos preparando su pedido" }),
+        new ProjectState({ oid: 4, name: "completed", studioLabel: "Listo para entrega", clientLabel: "Su pedido está listo para retirar" }),
+        new ProjectState({ oid: 5, name: "delivered", studioLabel: "Entregado", clientLabel: "Su pedido ya fue entregado" })];
+    const inserts = states.map(st => repo.create(st));
+    await Promise.all(inserts);
+};
+export const createOrderStates = async () => {
+    const repo = new OrderStateRepository();
+    const states: OrderState[] = [
+        new OrderState({ oid: 1, name: "pending" }),
+        new OrderState({ oid: 2, name: "confirmed" }),
+        new OrderState({ oid: 3, name: "completed" }),
+        new OrderState({ oid: 4, name: "delivered" })];
+    const inserts = states.map(st => repo.create(st));
+    await Promise.all(inserts);
+};
 

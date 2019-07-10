@@ -1,17 +1,13 @@
 import mongoose from "mongoose";
 import DataAccess from "../../src/config/dataAccess";
 import { ShutterlyncServer } from "../../src/ShutterlyncServer";
-import { Project } from "../../src/models/Project";
 import { createTestProject } from "../../src/initialization/initialization";
 import { MongoMemServer } from "./mongoMemServer";
 import { BaseObject } from "../../src/models/base/BaseObject";
 import { prop, Ref } from "typegoose";
 import _ from "lodash";
 import { UserController } from "../../src/controllers/UserController";
-import { UserRepository } from "../../src/repositories/UserRepository";
 import { User } from "../../src/models/User";
-import { UserQueryDto } from "../../src/dto/UserQueryDto";
-import { ProjectRepository } from "../../src/repositories/ProjectRepository";
 mongoose.Promise = global.Promise;
 
 
