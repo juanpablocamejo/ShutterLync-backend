@@ -31,7 +31,7 @@
     "inquirer-confirm": "^2.0.2",
     "jasmine": "^3.4.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.21",
     "method-override": "^3.0.0",
     "mime": "^2.4.2",
     "mongoose": "^5.4.15",
