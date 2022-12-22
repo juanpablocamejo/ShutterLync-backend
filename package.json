@@ -30,7 +30,7 @@
     "import-to-array": "^1.0.0",
     "inquirer-confirm": "^2.0.2",
     "jasmine": "^3.4.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.5",
     "method-override": "^3.0.0",
     "mime": "^2.4.2",
